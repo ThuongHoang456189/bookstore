@@ -5,6 +5,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import pq.jdev.b001.bookstore.users.constraint.FieldMatch;
+import pq.jdev.b001.bookstore.users.constraint.ValidPassword;
 
 @FieldMatch.List({
     @FieldMatch(first = "password", second = "confirmPassword", message = "The password fields must match"),
@@ -25,9 +26,11 @@ public class UserRegistrationDto {
 	private String email;
 	
 	@NotEmpty
+	@ValidPassword
 	private String password;
 
 	@NotEmpty
+	@ValidPassword
 	private String confirmPassword;
 
 	private String phone;

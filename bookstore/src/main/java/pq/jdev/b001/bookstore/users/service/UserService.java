@@ -13,5 +13,5 @@ public interface UserService extends UserDetailsService {
 
     Person save(UserRegistrationDto registration);
 
-    void updatePassword(String password, Long userId);
+    void updatePassword(String password, Long personId);
 }
