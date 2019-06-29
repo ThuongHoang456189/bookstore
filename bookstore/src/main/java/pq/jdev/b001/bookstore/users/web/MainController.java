@@ -15,9 +15,11 @@ public class MainController {
 	public String login(Model model) {
 		return "login";
 	}
+	
 
-	@GetMapping("/user")
+
+	@GetMapping("/subpage")
 	public String userIndex() {
-		return "user/index";
+		return "subpage";
 	}
 }
