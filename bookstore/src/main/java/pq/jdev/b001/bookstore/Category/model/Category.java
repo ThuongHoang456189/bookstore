@@ -20,7 +20,10 @@ public class Category {
 	private Date createdate;
 	private Date updatedate;
 	
-
+	public Category() {
+		
+	}
+	
 	public Category(int id, String name, Date createdate,Date updatedate) {
 		this.id = id;
 		this.name = name;
