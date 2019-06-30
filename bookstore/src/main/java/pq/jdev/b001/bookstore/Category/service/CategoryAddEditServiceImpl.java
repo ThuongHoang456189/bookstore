@@ -1,4 +1,4 @@
-package bookstore.Category.service;
+package pq.jdev.b001.bookstore.Category.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,8 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import bookstore.Category.model.Category;
-import bookstore.Category.repository.CategoryAddEditRepository;
+import pq.jdev.b001.bookstore.Category.model.Category;
+import pq.jdev.b001.bookstore.Category.repository.CategoryAddEditRepository;
 
 public class CategoryAddEditServiceImpl implements CategoryAddEditService{
 

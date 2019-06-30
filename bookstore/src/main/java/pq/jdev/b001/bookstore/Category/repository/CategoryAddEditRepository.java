@@ -1,9 +1,9 @@
-package bookstore.Category.repository;
+package pq.jdev.b001.bookstore.Category.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import bookstore.Category.model.Category;
+import pq.jdev.b001.bookstore.Category.model.Category;
 
 
 @Repository
