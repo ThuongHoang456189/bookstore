@@ -4,8 +4,6 @@
 <head>
   <link rel="stylesheet" href="style.css" />
   <meta charset="UTF-08" />
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.js"
-    integrity="sha256-BTlTdQO9/fascB1drekrDVkaKd9PkwBymMlHOiG+qLI=" crossorigin="anonymous"></script>
   <style>
     input[type=text] {
       border: 0;
@@ -51,9 +49,9 @@
 </head>
 
 <body>
-  <form action="/action_page.php">
+  <form th:action="@{/addition}" th:object="${category}" method="post" >
     <div>
-      <label for="fname">Category Name</label>
+      <label for="name">Category Name</label>
       <input type="text" id="categoryName" name="name" placeholder="new category..." required />
     </div>
     <button type="submit" id="add">ADD</button>
