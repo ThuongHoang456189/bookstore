@@ -1,11 +1,10 @@
-package pq.jdev.b001.bookstore.models;
+package pq.jdev.b001.bookstore.publisher.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
+@Table(name="publisher")
 public class Publishers {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
