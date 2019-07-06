@@ -9,7 +9,7 @@
 	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-<title>Registration</title>
+<title>Admin Registration</title>
 </head>
 <body>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -29,7 +29,7 @@
 
 	<br>
 	<br>
-
+	<a th:href="@{/admin}">Back Admin</a></span>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
@@ -39,8 +39,8 @@
 						to our awesome app!</div>
 				</div>
 
-				<h1>Registration</h1>
-				<form th:action="@{/registration}" th:object="${person}" method="post">
+				<h1>Admin Registration Form </h1>
+				<form th:action="@{/admin/registration_admin}" th:object="${person}" method="post">
 
 					<p class="error-message" th:if="${#fields.hasGlobalErrors()}"
 						th:each="error : ${#fields.errors('global')}" th:text="${error}">Validation
@@ -79,6 +79,7 @@
 						<label>BirthDay</label>
                     	<input type="date" name="birthday" id="birthday" value="1945-01-01">
 					</div>
+					
 					<div class="form-group"
 						th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
 						<label for="email" class="control-label">E-mail</label> <input
@@ -86,6 +87,14 @@
 						<p class="error-message"
 							th:each="error : ${#fields.errors('email')}" th:text="${error}">Validation
 							error</p>
+					</div>
+					
+					<div class="form-group" name="power">
+						<label>Power</label>
+						<select>
+							<option selected value=0> Employee </option>
+							<option value=1> Admin </option>
+						</select>
 					</div>
 					
 					<div class="form-group"
@@ -107,28 +116,16 @@
 					</div>
 					<div class="form-group"
 						th:classappend="${#fields.hasErrors('confirmPassword')}? 'has-error':''">
-						<label for="confirmPassword" class="control-label">Confirm
-							password</label> <input id="confirmPassword" class="form-control"
+						<label for="confirmPassword" class="control-label">Confirm password</label> <input id="confirmPassword" class="form-control"
 							type="password" th:field="*{confirmPassword}" />
 						<p class="error-message"
 							th:each="error : ${#fields.errors('confirmPassword')}"
 							th:text="${error}">Validation error</p>
 					</div>
 					
-					<div class="form-group"
-						th:classappend="${#fields.hasErrors('terms')}? 'has-error':''">
-						<input id="terms" type="checkbox" th:field="*{terms}" /> <label
-							class="control-label" for="terms"> I agree with the <a
-							href="#">terms and conditions</a> for Registration.
-						</label>
-						<p class="error-message"
-							th:each="error : ${#fields.errors('terms')}" th:text="${error}">Validation
-							error</p>
-					</div>
+					
 					<div class="form-group">
 						<button type="submit" class="btn btn-success">Register</button>
-						<span>Already registered? <a href="/" th:href="@{/login}">Login
-								here</a></span>
 					</div>
 
 				</form>

@@ -27,8 +27,10 @@ public class PasswordResetController {
 
 	@Autowired
 	private UserService userService;
+	
 	@Autowired
 	private PasswordResetTokenRepository tokenRepository;
+	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 

@@ -1,7 +1,9 @@
 package pq.jdev.b001.bookstore.users.model;
 
+import java.io.Serializable;
 import java.sql.Date;
-import java.util.Collection;
+import java.sql.Timestamp;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,11 +17,15 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
-public class Person {
+public class Person implements Serializable{
+	private static final long serialVersionUID = 1L;
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String firstname;
@@ -28,34 +34,37 @@ public class Person {
     private String Address;
     private String email;
     private int sex;
+    private int power;
     private String username;
     private String password;
     private Date birthday;
 
+    @CreationTimestamp
+    private Timestamp create_date;
+    
+    @UpdateTimestamp
+    private Timestamp update_date;
+    
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "role_person",
-            joinColumns = @JoinColumn(
-                    name = "PERSONID", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "ROLEID", referencedColumnName = "id"))
-    private Collection<Role> roles;
+	@JoinTable(
+			name = "role_person",
+			joinColumns = @JoinColumn(name = "personid"),
+			inverseJoinColumns = @JoinColumn(name = "roleid")
+	)
+	private Set<Role> roles;
 
-    public Person() {
+	public Person(long id){
+        this.id = id;
     }
+	
+	public Person() {
+	}
 
-	public Person(Long id, String firstname, String lastname, String phone, String address, String email,
-			String username, String password, int sex, Date birthday, Collection<Role> roles) {
-		this.id = id;
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.phone = phone;
-		this.Address = address;
-		this.email = email;
-		this.sex = sex;
-		this.birthday = birthday;
-		this.username = username;
-		this.password = password;
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 
@@ -131,14 +140,6 @@ public class Person {
         this.password = password;
     }
 
-    public Collection<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Collection<Role> roles) {
-        this.roles = roles;
-    }
-
 	public int getSex() {
 		return sex;
 	}
@@ -146,19 +147,29 @@ public class Person {
 	public void setSex(int sex) {
 		this.sex = sex;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Person{id=" + id + 
-				", firstname=" + firstname + 
-				", lastname=" + lastname + 
-				", phone=" + phone + 
-				", Address=" + Address + 
-				", email=" + email + 
-				", sex=" + sex +
-				", birthday=" + birthday +
-				", username=" + username + 
-				", password=" + password + 
-				", roles=" + roles + "}";
-	}	
+		return "Person [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", phone=" + phone
+				+ ", Address=" + Address + ", email=" + email + ", sex=" + sex + ", power=" + power + ", username="
+				+ username + ", password=" + password + ", birthday=" + birthday + ", create_date=" + create_date
+				+ ", update_date=" + update_date + ", roles=" + roles + "]";
+	}
+
+	public int getPower() {
+		return power;
+	}
+
+	public void setPower(int power) {
+		this.power = power;
+	}
+
+	public Timestamp getUpdate_date() {
+		return update_date;
+	}
+
+	public void setUpdate_date(Timestamp update_date) {
+		this.update_date = update_date;
+	}
+
 }

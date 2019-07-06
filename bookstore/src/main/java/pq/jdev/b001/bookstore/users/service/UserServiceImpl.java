@@ -1,12 +1,9 @@
 package pq.jdev.b001.bookstore.users.service;
 
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.stream.Collectors;
+import java.security.Principal;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,69 +12,138 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import pq.jdev.b001.bookstore.users.model.Person;
 import pq.jdev.b001.bookstore.users.model.Role;
+import pq.jdev.b001.bookstore.users.repository.RoleRepository;
 import pq.jdev.b001.bookstore.users.repository.UserRepository;
-import pq.jdev.b001.bookstore.users.web.dto.UserRegistrationDto;
+import pq.jdev.b001.bookstore.users.web.dto.AdminDto;
+import pq.jdev.b001.bookstore.users.web.dto.UserDto;
+import pq.jdev.b001.bookstore.users.web.dto.UserUpdateInfoDto;
 
-@Service
+@Service("userService")
+@Transactional
 public class UserServiceImpl implements UserService {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-
-    public Person findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-    public Date setbirth(String date)
-    {
-    	Date day;
-		try {
-			day = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(date);
-			return day;
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-    	return null;
-    }
-    public Person save(UserRegistrationDto registration) {
-        Person user = new Person();
-        user.setFirstname(registration.getFirstName());
-        user.setLastname(registration.getLastName());
-        user.setPhone(registration.getPhone());
-        user.setAddress(registration.getAddress());
-        user.setSex(registration.getSex());
-        user.setBirthday((java.sql.Date ) new java.sql.Date(setbirth(registration.getBirthday()).getTime()));
-        user.setEmail(registration.getEmail());
-        user.setUsername(registration.getUserName());
-        user.setPassword(passwordEncoder.encode(registration.getPassword()));
-        user.setRoles(Arrays.asList(new Role("ROLE_PERSON")));
-        return userRepository.save(user);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Person user = userRepository.findByEmail(email);
-        if (user == null) {
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private RoleRepository roleRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Override
+	@Transactional
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Person person = userRepository.findByUsername(username);
+		if (person == null) {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
-        return new org.springframework.security.core.userdetails.User(user.getEmail(),
-            user.getPassword(),
-            mapRolesToAuthorities(user.getRoles()));
-    }
-
-    private Collection < ? extends GrantedAuthority > mapRolesToAuthorities(Collection <Role> roles) {
-        return roles.stream()
-            .map(role -> new SimpleGrantedAuthority(role.getName()))
-            .collect(Collectors.toList());
-    }
+		
+		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+		Set<Role> roles = person.getRoles();
+		for (Role role : roles) {
+			grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
+		}
+		
+		return new org.springframework.security.core.userdetails.User(
+				person.getUsername(), person.getPassword(), grantedAuthorities);
+	}
 
 	@Override
-	public void updatePassword(String password, Long personId) {
-		userRepository.updatePassword(password, personId);
+	public Person findByUsername(String userName) {
+		return userRepository.findByUsername(userName);
 	}
+
+	@Override
+	public Person findByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
+
+	@Override
+	public Person save(AdminDto userDto) {
+		return null;
+	}
+
+	@Override
+	public void updatePassword(String updatedPassword, Long id) {
+		userRepository.updatePassword(updatedPassword, id);
+	}
+
+	@Override
+	public UserUpdateInfoDto updateInfo(Principal principal) {
+		String username = principal.getName(); 
+		Person p = userRepository.findByUsername(username);
+		UserUpdateInfoDto us = new UserUpdateInfoDto();
+		us.setId(p.getId());
+		us.setFirstName(p.getFirstname());
+		us.setLastName(p.getLastname());
+		us.setAddress(p.getAddress());
+		us.setBirthday(p.getBirthday());
+		us.setEmail(p.getEmail());
+		us.setPhone(p.getPhone());
+		us.setPower(p.getPower());
+		us.setUserName(p.getUsername());
+		us.setPassword(p.getPassword());
+		us.setConfirmPassword(p.getPassword());
+		us.setSex(p.getSex());
+		us.setRoles(p.getRoles());
+		return us;
+	}
+
+	@Override
+	public Person save(UserDto userDto) {
+		Person person = new Person();
+		person.setFirstname(userDto.getFirstName());
+		person.setLastname(userDto.getLastName());
+		person.setPhone(userDto.getPhone());
+		person.setAddress(userDto.getAddress());
+		person.setSex(userDto.getSex());
+		person.setBirthday(userDto.getBirthday());
+		person.setEmail(userDto.getEmail());
+		person.setUsername(userDto.getUserName());
+		person.setPassword(passwordEncoder.encode(userDto.getPassword()));
+		person.setPower(userDto.getPower());
+		HashSet<Role> roles = new HashSet<>();
+        roles.add(roleRepository.findByName("ROLE_EMPLOYEE"));
+        person.setRoles(roles);
+        return userRepository.save(person);
+	}
+	
+	@Override
+	public Person save(UserUpdateInfoDto userDto) {
+		Person person = findById(userDto.getId());
+		person.setFirstname(userDto.getFirstName());
+		person.setLastname(userDto.getLastName());
+		person.setPhone(userDto.getPhone());
+		person.setAddress(userDto.getAddress());
+		person.setSex(userDto.getSex());
+		person.setBirthday(userDto.getBirthday());
+		person.setEmail(userDto.getEmail());
+		person.setUsername(userDto.getUserName());
+		person.setPassword(userDto.getPassword());
+		person.setPower(userDto.getPower());
+		person.setUpdate_date(userDto.getUpdate_date());
+        person.setRoles(userDto.getRoles());
+        return userRepository.save(person);
+	}
+	
+	@Override
+	public void delete(Long id) {
+		userRepository.deleteByIdP(id);
+	}
+
+	@Override
+	public Person findById(Long id) {
+		return userRepository.findById(id).get();
+	}
+
+	@Override
+	public List<Person> findAll() {
+		return userRepository.findAll();
+	}
+
 }
