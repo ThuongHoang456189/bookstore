@@ -12,6 +12,7 @@ public class PublisherServiceImpl implements PublisherService{
 	@Autowired
 	PublisherRepository publisherRepository;
 	
+	
 	@Override
 	public List<Publishers> findall() {
 		// TODO Auto-generated method stub
@@ -26,9 +27,9 @@ public class PublisherServiceImpl implements PublisherService{
 	}
 
 	@Override
-	public Publishers find(int publisherId) {
+	public Publishers find(long publisherId) {
 		// TODO Auto-generated method stub
-		return publisherRepository.find(publisherId);
+		return publisherRepository.findById(publisherId).get();
 	}
 
 }

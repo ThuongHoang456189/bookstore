@@ -77,19 +77,21 @@
 							          <th>CREATEDDATE  </th>
 							          <th>UPLOADNAME  </th>
 							          <th>UPDATEDATE </th>
+							          <th>Edit </th>
+							          <th>Delete </th>
                                     </tr>
                                 </thead>
                                 <tbody>
 							        </tr>
-							            <tr th:each="publisher:${Publishers}">
-							             <td th:utext="${publisher.id}"></td>
-							             <td th:utext="${publisher.publisher}"></td>
-							             <td th:utext="${publisher.createName}"></td>
-							             <td th:utext="${publisher.createDate}"></td>
-							             <td th:utext="${publisher.updateName}"></td>
-							             <td th:utext="${publisher.updateDate}"></td>
-							             <td><a th:href="@{/publishersList}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
-                                         <td><a th:href="@{/publishersList}" class="btn btn-primary"><i class="fas fa-user-times ml-2"></i></a></td>
+							             <tr th:each="publisher:${publishers}">
+							             <td th:utext="${publisher.id}">ID</td>
+							             <td th:utext="${publisher.publisher}">Publisher</td>
+							             <td th:utext="${publisher.createName}">CreateName</td>
+							             <td th:utext="${publisher.createDate}">CrateDate</td>
+							             <td th:utext="${publisher.updateName}">UploadName</td>
+							             <td th:utext="${publisher.updateDate}">UploadDate</td>
+							             <td><a th:href="@{detailPublishers}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
+                                         <td><a th:href="@{publishersList}" class="btn btn-primary"><i class="fas fa-user-times ml-2"></i></a></td>
 							          </tr>
                                 </tbody>
                             </table>
