@@ -27,6 +27,10 @@ public class CategoryAddEditServiceImpl implements CategoryAddEditService{
 		category.setUpdatedate(new Date(Calendar.getInstance().getTime().getTime()));
 		return categoryrepository.save(category);
 	}
+	@Override
+	public List<Category> findAll() {
+		return (List<Category>) categoryrepository.findAll();
+	}
 
 
 
