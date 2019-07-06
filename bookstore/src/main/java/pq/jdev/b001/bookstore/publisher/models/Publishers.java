@@ -3,16 +3,25 @@ package pq.jdev.b001.bookstore.publisher.models;
 import javax.persistence.*;
 import java.util.Collection;
 
-@Entity
-@Table(name="publisher")
+@Entity(name="Publish")
+@Table(name="publish")
 public class Publishers {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id ;
+    @Column(name = "PUBLISHINGHOUSE")
 	private String publisher ;
+    
+    @Column(name = "CREATEDUSER")
 	private String createName ;
+    
+    @Column(name = "CREATEDDATE")
 	private String createDate ;
+    
+    @Column(name = "UPLOADUSER")
 	private String updateName ;
+	
+    @Column(name = "UPDATEDATE")
 	private String updateDate ;
 	
 	public Publishers() {

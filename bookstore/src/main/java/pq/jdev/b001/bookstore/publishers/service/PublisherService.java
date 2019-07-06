@@ -8,7 +8,7 @@ import pq.jdev.b001.bookstore.publisher.models.Publishers;
 
 @Service
 public interface PublisherService {
-	public List<Publishers> findall();
+	List<Publishers> findall();
 	public void deletePublisher (int publisherId);
-	public Publishers find(int publisherId);
+	public Publishers find(long publisherId);
 }
