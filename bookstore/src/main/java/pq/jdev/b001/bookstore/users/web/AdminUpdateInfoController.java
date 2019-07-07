@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,10 +22,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import pq.jdev.b001.bookstore.users.model.Person;
+import pq.jdev.b001.bookstore.users.repository.UserRepository;
 import pq.jdev.b001.bookstore.users.service.UserService;
 import pq.jdev.b001.bookstore.users.web.dto.UserUpdateInfoDto;
 
 @Controller
+@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/accountAdmin")
 public class AdminUpdateInfoController {
 
@@ -32,11 +36,16 @@ public class AdminUpdateInfoController {
 	private UserService userService;
 	
 	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
 	@ModelAttribute("person")
 	public UserUpdateInfoDto updateInfoDto(Principal principal) {
-		return userService.updateInfo(principal);
+		String username = principal.getName(); 
+		Person p = userRepository.findByUsername(username);
+		return userService.updateInfo(p);
 	}
 	
 	//update info
@@ -60,23 +69,23 @@ public class AdminUpdateInfoController {
 	
 	//update pass
 	
-	@RequestMapping(value = "/changePassword", method = RequestMethod.GET)
+	@RequestMapping(value = "/changePassAdmin", method = RequestMethod.GET)
 	public String showChangePassForm(Model model) {
-		return "/changePassword";
+		return "/changePassAdmin";
 	}
 	
-	@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
+	@RequestMapping(value = "/changePassAdmin", method = RequestMethod.POST)
 	public String UpdatePassUserAccount(@ModelAttribute("person") @Valid UserUpdateInfoDto userDto,
 			BindingResult result) {
 
 	    if (result.hasErrors()) {
-            return "/myAccount/changePassword";
+            return "/accountAdmin/changePassAdmin";
 	    }
 	    
 	    String updatedPassword = passwordEncoder.encode(userDto.getPassword());
 		userService.updatePassword(updatedPassword, userDto.getId());
 		userService.loadUserByUsername(userDto.getUserName());
-		return "redirect:/accountAdmin/changePassword?success";
+		return "redirect:/accountAdmin/changePassAdmin?success";
 	}
 	
 	// delete user

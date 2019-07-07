@@ -1,6 +1,5 @@
 package pq.jdev.b001.bookstore.users.service;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,12 +23,11 @@ public interface UserService extends UserDetailsService {
 	
     void updatePassword(String password, Long personId);
 
-	UserUpdateInfoDto updateInfo(Principal principal);
+	UserUpdateInfoDto updateInfo(Person p);
 
 	void delete(Long id);
 
 	Person findById(Long id);
 
-	List<Person> findAll();
-	
+	List<Person> findAll();	
 }

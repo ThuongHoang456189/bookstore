@@ -26,7 +26,7 @@
 	<div id="templatemo_container">
 		<div id="templatemo_menu">
 			<ul>
-				<li><a href="">Home</a></li>
+				<li><a th:href="@{/admin}">Home</a></li>
 				<li><a href="#" class="current">Search</a></li>
 				<li><a href="index.html">Books</a></li>
 				<li><a href="index.html">New Releases</a></li>
@@ -35,13 +35,13 @@
 			</ul>
 			<div class="user-admin">
 				<a th:href="@{/listUser}">List Account</a>
-				<a th:href="@{/myAccount}">My Account</a>
+				<a th:href="@{/accountAdmin}">My Account</a>
 				<a th:href="@{/logout}">Logout</a>
 			</div>
 		</div>
-		
 		<div>
 			<h1>List's User</h1>
+				<a th:href="@{/userList/adminAddUser}">Add New User</a>
 				<table class="table">
 				<thead>
 					<tr>

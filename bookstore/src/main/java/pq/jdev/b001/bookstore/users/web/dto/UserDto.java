@@ -139,6 +139,4 @@ public class UserDto {
 	public int getPower() {
 		return power;
 	}
-
-	
 }

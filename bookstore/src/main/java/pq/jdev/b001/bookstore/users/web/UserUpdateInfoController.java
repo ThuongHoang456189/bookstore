@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import pq.jdev.b001.bookstore.users.model.Person;
+import pq.jdev.b001.bookstore.users.repository.UserRepository;
 import pq.jdev.b001.bookstore.users.service.UserService;
 import pq.jdev.b001.bookstore.users.web.dto.UserUpdateInfoDto;
 
@@ -31,11 +33,16 @@ public class UserUpdateInfoController {
 	private UserService userService;
 	
 	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
 	@ModelAttribute("person")
 	public UserUpdateInfoDto updateInfoDto(Principal principal) {
-		return userService.updateInfo(principal);
+		String username = principal.getName(); 
+		Person p = userRepository.findByUsername(username);
+		return userService.updateInfo(p);
 	}
 	
 	//update info

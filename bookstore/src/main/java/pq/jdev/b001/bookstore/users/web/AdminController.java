@@ -4,16 +4,25 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import pq.jdev.b001.bookstore.users.model.Person;
 import pq.jdev.b001.bookstore.users.repository.UserRepository;
@@ -31,6 +40,10 @@ public class AdminController {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
+	//tao list
 	@ModelAttribute("list")
 	public List<Person> getList(Principal principal) {
 		String username = principal.getName(); 
@@ -45,39 +58,87 @@ public class AdminController {
 		return newList;
 	}
 	
-	@ModelAttribute("person")
-	public UserUpdateInfoDto updateInfoDto(Principal principal) {
-		return userService.updateInfo(principal);
-	}
-	
 	@GetMapping
 	public String showUpdateInfoForm(Model model, Principal principal) {
-		model.addAttribute("list", getList(principal));
+	model.addAttribute("list", getList(principal));
 		return "/listUser";
 	}
 	
+	//update user
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping(value = { "/edit-user-{id}" })
-	public String editUser(@PathVariable long id, ModelMap model) {
-	     Person person  = userService.findById(id);
-	     model.addAttribute("person", person);
-	     model.addAttribute("edit", true);
-	     return "registration";
-	 }
-	 
-	@PreAuthorize("hasRole('ADMIN')")
-	@PostMapping(value = { "/edit-user-{id}" })
-	public String updateUser(Person person, ModelMap model, @PathVariable long id) {
-	     //userService.updateUser(person);
-	     model.addAttribute("success", "Person " + person.getFirstname() + person.getLastname() + " updated successfully");
-	     return "success";
+	@GetMapping(value = "/edit-user-{id}")
+	public String showUpdateInfoForm(Model model, Principal principal, @PathVariable long id) {
+		List<Person> list = getList(principal);
+		for (Person p : list)
+			if (p.getId() == id)
+			{
+				UserUpdateInfoDto uuid = userService.updateInfo(p);
+				model.addAttribute("person", uuid);
+			}
+		return "adminUpdateUser";
 	}
+
+	@PostMapping(value = "/edit-user-{id}")
+	public String updateUserAccount(@PathVariable long id, Model model, Principal principal, @ModelAttribute("person") @Valid UserUpdateInfoDto userDto,
+			BindingResult result) throws Exception {
+		
+	    if (result.hasErrors()) {
+	    	System.out.println(result.toString());
+            return "adminUpdateUser";
+	    }
+		userService.save(userDto);
+		
+		return "redirect:/listUser";
+	}
+	
+	
+	//change password
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@RequestMapping(value = "/edit-user-{id}/changePassword", method = RequestMethod.GET)
+	public String showChangePassForm(@PathVariable long id, Model model, Principal principal) {
+		List<Person> list = getList(principal);
+		for (Person p : list)
+			if (p.getId() == id)
+			{
+				UserUpdateInfoDto uuid = userService.updateInfo(p);
+				model.addAttribute("person", uuid);
+			}
+		return "/adminChangePassword";
+	}
+	
+	@RequestMapping(value = "/edit-user-{id}/changePassword", method = RequestMethod.POST)
+	public String UpdatePassUserAccount(@PathVariable long id, @ModelAttribute("person") @Valid UserUpdateInfoDto userDto,
+			BindingResult result) {
+		String url ="";
+	    if (result.hasErrors()) {
+	    	url = "/listUser/edit-user-" + String.valueOf(id) + "/changePassword";
+            return url;
+	    }
+	    
+	    String updatedPassword = passwordEncoder.encode(userDto.getPassword());
+		userService.updatePassword(updatedPassword, userDto.getId());
+		userService.loadUserByUsername(userDto.getUserName());
+		url ="";
+		url = "redirect:/listUser/edit-user-" + String.valueOf(id) + "/changePassword?success";
+		return url;
+	}
+	
+	// delete user
 	
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = { "/delete-user-{id}" })
-	public String deleteUser(@PathVariable long id, Principal principal) {
+	public String deleteUser(@PathVariable long id, Principal principal, HttpServletRequest request, HttpServletResponse response) {
 		int key_user_delete = userRepository.findById(id).getPower();
-		int key_admin  = userRepository.findByUsername(principal.getName()).getPower();
+		Person p = userRepository.findByUsername(principal.getName());
+		int key_admin  = p.getPower();
+		
+		if (id == p.getId()){
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        if (auth != null){    
+	            new SecurityContextLogoutHandler().logout(request, response, auth);
+	        }
+		}
 	
 		if (key_admin >= key_user_delete)
 				userService.delete(id);

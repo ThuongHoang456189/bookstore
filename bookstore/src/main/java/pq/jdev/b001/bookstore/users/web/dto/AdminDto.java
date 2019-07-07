@@ -2,16 +2,9 @@ package pq.jdev.b001.bookstore.users.web.dto;
 
 import java.sql.Date;
 
-import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-import pq.jdev.b001.bookstore.users.constraint.FieldMatch;
-import pq.jdev.b001.bookstore.users.constraint.ValidPassword;
-
-@FieldMatch.List({
-    @FieldMatch(first = "password", second = "confirmPassword", message = "The password fields must match"),
-})
 public class AdminDto {
 
 	@NotEmpty
@@ -28,12 +21,7 @@ public class AdminDto {
 	private String email;
 	
 	@NotEmpty
-	@ValidPassword
 	private String password;
-
-	@NotEmpty
-	@ValidPassword
-	private String confirmPassword;
 
 	private String phone;
 	
@@ -43,8 +31,7 @@ public class AdminDto {
 	
 	private int sex;
 	
-	@AssertTrue
-	private Boolean terms;
+	private int power;
 	
 	public String getFirstName() {
 		return firstName;
@@ -86,22 +73,6 @@ public class AdminDto {
 		this.password = password;
 	}
 
-	public String getConfirmPassword() {
-		return confirmPassword;
-	}
-
-	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
-	}
-
-	public Boolean getTerms() {
-		return terms;
-	}
-
-	public void setTerms(Boolean terms) {
-		this.terms = terms;
-	}
-
 	public String getPhone() {
 		return phone;
 	}
@@ -132,5 +103,13 @@ public class AdminDto {
 
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
+	}
+
+	public int getPower() {
+		return power;
+	}
+
+	public void setPower(int power) {
+		this.power = power;
 	}
 }

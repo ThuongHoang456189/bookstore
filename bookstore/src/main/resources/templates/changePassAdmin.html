@@ -21,7 +21,7 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="@{/user}">Book Store</a>
+				<a class="navbar-brand" th:href="@{/admin}">Book Store</a>
 			</div>
 		</div>
 	</nav>
@@ -47,11 +47,11 @@
 	
 								<div th:if="${param.success}">
 									<script type="text/javascript">
-										window.location.href = "/accountUser";
+										window.location.href = "/accountAdmin";
 									</script>
 								</div>	
 	
-	                            <form th:action="@{/accountUser/changePassword}" th:object="${person}" method="post">
+	                            <form th:action="@{/accountAdmin/changePassAdmin}" th:object="${person}" method="post">
 									
 									<input type="hidden" id = "userName" name="userName" th:value="${person.userName}">
 									
@@ -103,7 +103,7 @@
 	            </div>
 	            <div class="row">
 	                <div class="col-md-12">
-	                    <a th:href="@{/accountUser}">back</a>
+	                    <a th:href="@{/accountAdmin}">back</a>
 	                </div>
 	            </div>
 	        </div>

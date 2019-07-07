@@ -36,7 +36,7 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="">Book Store</a>
+				<a class="navbar-brand" th:href="@{/admin}">Book Store</a>
 			</div>
 		</div>
 	</nav>
@@ -46,24 +46,25 @@
 	<div class="container">
 		<div class="row">
 			<div th:if="${param.success}">
-				<div class="alert alert-info">You've successfully Update!
-				</div>
+				<script type="text/javascript">
+					window.location.href = "/listUser";
+				</script>
 			</div>
 		
 			<h1 class="text-center">Admin Update User Account</h1>
 			
 			<div>
 							<span>
-								<a class="cp" th:href="@{/listUser/changePassword}">Change Password</a> 
-								<a class="da" th:href="@{'/listUser/delete-user-'+${user.id}}">Delete Account</a>
-								<a class="back" href="#">Back</a>
+								<a class="cp" th:href="@{'/listUser/edit-user-'+${person.id}+'/changePassword'}">Change Password</a> 
+								<a class="da" th:href="@{'/listUser/delete-user-'+${person.id}}">Delete Account</a>
+								<a class="back" th:href="@{/listUser}">Back</a>
 							</span>
 							<br> <br>
 						</div>
 			
 			<div class="container">
     			<div class="row">
-					<form th:action="@{/myAccount}" th:object="${person}" method="post">
+					<form th:action="@{'/listUser/edit-user-'+${person.id}}" th:object="${person}" method="post">
 						
 						<div class="form-group">
 							<p class="error-message" th:if="${#fields.hasGlobalErrors()}"
@@ -101,10 +102,14 @@
 							<br> <br>
 							<label>BirthDay</label>
 		                    	<input type="date" name="birthday" id="birthday" th:field="*{birthday}" value="${person.birthday}">
-						
+								<input type="hidden" name="id" id="id" value="${person.id}" th:field="*{id}">
+								<input type="hidden" name="userName" id="userName" value="${person.userName}" th:field="*{userName}">
+								<input type="hidden" name="password" id="password" value="${person.password}" th:field="*{password}">
+								<input type="hidden" name="confirmPassword" id="confirmPassword" value="${person.confirmPassword}" th:field="*{confirmPassword}">
+								<input type="hidden" name="email" id="email" value="${person.email}" th:field="*{email}">
+								<input type="hidden" name="power" id="power" value="${person.power}" th:field="*{power}">
 							<br> <br>
 							<button type="submit" class="btn btn-success">Update</button>
-							
 						</div>
 					</form>
 				</div>

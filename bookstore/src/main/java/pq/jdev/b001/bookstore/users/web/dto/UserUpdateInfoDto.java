@@ -135,7 +135,7 @@ public class UserUpdateInfoDto {
 	}
 
 	public void setPower(int power) {
-		this.power = 1;
+		this.power = power;
 	}
 
 	public Timestamp getUpdate_date() {
