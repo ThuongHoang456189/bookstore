@@ -101,7 +101,7 @@ public class NewBook {
 	public void setPersonid(long personid) {
 		this.personid = personid;
 	}
-	@OneToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	public Publisher getPublisher() {
 		return publisher;
 	}
