@@ -15,20 +15,16 @@ public class PublisherServiceImpl implements PublisherService{
 	
 	@Override
 	public List<Publishers> findall() {
-		// TODO Auto-generated method stub
 		return (List<Publishers>) publisherRepository.findAll();
 	}
 
 	@Override
 	public void deletePublisher(int publisherId) {
-		// TODO Auto-generated method stub
 		publisherRepository.deleteById((long) publisherId);
-		
 	}
 
 	@Override
 	public Publishers find(long publisherId) {
-		// TODO Auto-generated method stub
 		return publisherRepository.findById(publisherId).get();
 	}
 
