@@ -1,5 +1,7 @@
 package pq.jdev.b001.bookstore.books.controller;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,18 +14,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import pq.jdev.b001.bookstore.books.repository.CategoryRepository;
-import pq.jdev.b001.bookstore.books.repository.NewBookRepository;
-import pq.jdev.b001.bookstore.books.repository.PublisherRepository;
+import pq.jdev.b001.bookstore.books.repository.BookRepository;
 import pq.jdev.b001.bookstore.books.service.BookService;
 import pq.jdev.b001.bookstore.books.web.dto.UploadInformationDTO;
-import pq.jdev.b001.bookstore.books.model.Category;
-import pq.jdev.b001.bookstore.books.model.NewBook;
-import pq.jdev.b001.bookstore.books.model.Publisher;
+import pq.jdev.b001.bookstore.publisher.models.Publishers;
+import pq.jdev.b001.bookstore.publishers.repository.PublisherRepository;
+import pq.jdev.b001.bookstore.users.model.Person;
+import pq.jdev.b001.bookstore.users.repository.UserRepository;
+import pq.jdev.b001.bookstore.Category.model.Category;
+import pq.jdev.b001.bookstore.Category.repository.CategoryRepository;
+import pq.jdev.b001.bookstore.books.model.Book;
 import pq.jdev.b001.bookstore.books.model.SelectCategory;
 import pq.jdev.b001.bookstore.books.model.SelectPublisher;
 
-@Controller
+@Controller 
 public class BookController {
 	
 	@Autowired
@@ -33,22 +37,13 @@ public class BookController {
 	private CategoryRepository categoryRepository;
 	
 	@Autowired
-	private NewBookRepository newBookRepository;
+	private BookRepository bookRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	@Autowired
 	private BookService bookService;
-	
-	@GetMapping("/")
-	public String home(Model model)
-	{
-		return "index";
-	}
-	
-	@GetMapping("/bookview")
-	public String homeBook(Model model)
-	{
-		return "bookview/indextemp";
-	}
 	
 	@ModelAttribute("dto")
 	public UploadInformationDTO dTO ()
@@ -56,43 +51,97 @@ public class BookController {
 		return new UploadInformationDTO();
 	}
 	
-	@GetMapping("/bookview/createform")
-	public String InitializeCreateBook(UploadInformationDTO dto, RedirectAttributes redirectAttributes)
+	@GetMapping("/")
+	public String home(Model model)
 	{
-		List<Publisher> publishers = publisherRepository.findAll();
+		return "index";
+	}
+	
+	@GetMapping("/bookview/{personid}")
+	public String showAddEditView(@PathVariable Long personid, Model model)
+	{
+		//userservice find by id
+		//Getrole user
+		//userService getRoleById and userServiceGetCurrentUserId
+		//check session personid and personid passed through URL
+		
+		int role = -1;
+		List<Book> books = new ArrayList<Book>();
+		if(role==2)
+		{
+			books = bookRepository.findAll();
+		}
+		else
+		{
+			//person = userRepository.findById(personid)
+			books = bookRepository.findBooksByPersonId(personid);
+		}
+		
+		//model.addAttribute("person", person);
+		model.addAttribute("books", books);
+		
+		
+		//redirect /bookview/{personid}
+		return null;
+		
+	}
+	
+	@GetMapping("/bookview/{personid}/createform")
+	public String InitializeCreateBook(@PathVariable Long personid, UploadInformationDTO dto, Model model, RedirectAttributes redirectAttributes)
+	{
+		//check the same person_person through URL and person_session
+		List<Publishers> publishers = publisherRepository.findAll();
+		List<SelectPublisher> selectPublishers = new ArrayList<>();
 		
 		for(int i = 0; i < publishers.size(); i++) {
-            System.out.println(publishers.get(i).getName_publisher());
+            System.out.println(publishers.get(i).getUpdateName());
+            SelectPublisher temp = new SelectPublisher(publishers.get(i), 0);
+            selectPublishers.add(temp);
         }
 		
-		dto.setListpublishers(publishers);
+		dto.setSelectPublishers(selectPublishers);
 		
 		List<Category> categories = categoryRepository.findAll();
+//		List<SelectCategory> selectCategories = new ArrayList<>();
 		
 		for(int i = 0; i < categories.size(); i++) {
             System.out.println(categories.get(i).getName());
+//            SelectCategory temp = new SelectCategory(categories.get(i), 0);
+//            selectCategories.add(temp);
         }
 		
-		dto.setListcategories(categories);
+//		dto.setSelectCategories(selectCategories);
+		dto.setCategories(categories);
+		
+		model.addAttribute("dto", dto);
 		
 		redirectAttributes.addAttribute("dto", dto);
-		return "redirect:/bookview/createform";
+		
+		return "redirect:/bookview/{personid}/createform";
 	}
 	
-	@PostMapping("/bookview/createform")
-	public String CreatBookInputHandler( UploadInformationDTO dto, Model model, RedirectAttributes redirectAttributes)
+	@PostMapping("/bookview/{personid}/createform")
+	public String CreatBookInputHandler(@PathVariable Long personid, UploadInformationDTO dto, Model model, RedirectAttributes redirectAttributes, Person person)
 	{
 		try {
-			long personid = -1;
-			//Connect to function to get the personid after login from user.
-			bookService.uploadBook(personid, dto);
-			System.out.println("Successful insert new book");
-			return "bookview/success";
-		}catch (Exception e) {
+			
+				//Connect to function to get the personid after login from user.
+				LocalDate date = LocalDate.now();			
+				Date uploadedDate = new Date(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+			
+				dto.setUploadedDate(uploadedDate);
+				
+			
+				bookService.save(dto, person);
+			
+				System.out.println("Successful insert new book");
+				return "bookview/success";
+			
+			}catch (Exception e) {
 			// TODO: handle exception
-			System.out.println("Error Controller CreatBookInputHandler: ****" + e.getMessage());
-			return "bookview/error";
-		}
+				System.out.println("Error Controller CreatBookInputHandler: ****" + e.getMessage());
+				return "bookview/error";
+			}
 	}
 	
 //	@GetMapping("/bookview/editbookid")
@@ -101,84 +150,84 @@ public class BookController {
 //		return "bookview/editbookid";
 //	}
 	
-	@GetMapping("/bookview/editbook/{id}")
-	public String BookEditInitialize(@PathVariable(name = "id", required = true) long bookid, UploadInformationDTO dto, Model model, RedirectAttributes redirectAttributes)
+	
+	@GetMapping("/bookview/{personid}/editform/{bookid}")
+	public String BookEditInitialize(@PathVariable(name = "personid", required = true) long personid, @PathVariable(name = "bookid", required = true) long bookid, UploadInformationDTO dto, Model model, RedirectAttributes redirectAttributes, Person person)
 	{
 		try {
-			NewBook bookfind = newBookRepository.findByID(bookid);
-			long personid = -1;
-			//Connect to function to get the personid after login from user.
-			if(bookfind.getPersonid()==personid)
-			{
-				try {
+				Book bookFound = bookRepository.findByBookId(bookid);
+				if(bookFound != null) {
 					
-					dto.setTitle(bookfind.getTitle());
-					dto.setPrice(bookfind.getPrice());
-					dto.setDomain(bookfind.getDomain());
-					dto.setAuthors(bookfind.getAuthors());
-					
-					List<Publisher> publishers = publisherRepository.findAll();
-					
-					List<SelectPublisher> selectPublishers = new ArrayList<>();
-					
-					SelectPublisher temp = new SelectPublisher();
-					
-					for(int i = 0; i < publishers.size(); i++) {
-			            System.out.println(publishers.get(i).getName_publisher());
-			            temp.setPublisher(publishers.get(i));
-			            
-			            if(bookfind.getPublisher().getName_publisher().equals(publishers.get(i).getName_publisher()))
-			            {
-			            	temp.setFlag(1);
-			            }
-			            selectPublishers.add(temp);
-			        }
-					
-					dto.setSelectPublishers(selectPublishers);
-					
-					List<Category> categories = categoryRepository.findAll();
-					
-					List<SelectCategory> selectCategories = new ArrayList<>();
-					
-					SelectCategory temp1 = new SelectCategory();
-					
-					for(int i = 0; i < categories.size(); i++) {
-			            System.out.println(categories.get(i).getName());
-			            for(Category o : bookfind.getCategories())
-			            {
-			            	if(o.getCategoryid()==categories.get(i).getCategoryid())
-			            	{
-			            		temp1.setFlag(1);
-			            	}
-			            }
-			            selectCategories.add(temp1);
-			        }
-					
-					dto.setSelectCategories(selectCategories);
-					
-					redirectAttributes.addAttribute("dto", dto);
-					model.addAttribute("dto", dto);
-					
-					return "redirect:/bookview/editform";
+					try {
+						
+						dto.setTitle(bookFound.getTitle());
+						dto.setPrice(bookFound.getPrice());
+						dto.setDomain(bookFound.getDomain());
+						dto.setAuthors(bookFound.getAuthors());
+						Person personUpdated = userRepository.findById(personid);
+						model.addAttribute("person", personUpdated);
+						
+						List<Publishers> publishers = publisherRepository.findAll();
+						List<SelectPublisher> selectPublishers = new ArrayList<>();
+						
+						SelectPublisher temp = new SelectPublisher();
+						
+						for(int i = 0; i < publishers.size(); i++) {
+				            System.out.println(publishers.get(i).getUpdateName());
+				            temp.setPublisher(publishers.get(i));
+				            
+//				            if(bookFound.getPublisher().getName_publisher().equals(publishers.get(i).getName_publisher()))
+//				            {
+//				            	temp.setFlag(1);
+//				            }
+				            selectPublishers.add(temp);
+				        }
+						
+						dto.setSelectPublishers(selectPublishers);
+						
+						List<Category> categories = categoryRepository.findAll();
+						
+						List<SelectCategory> selectCategories = new ArrayList<>();
+						
+						SelectCategory temp1 = new SelectCategory();
+						
+//						for(int i = 0; i < categories.size(); i++) {
+//				            System.out.println(categories.get(i).getName());
+//				            for(Category o : bookfind.getCategories())
+//				            {
+//				            	if(o.getCategoryid()==categories.get(i).getCategoryid())
+//				            	{
+//				            		temp1.setFlag(1);
+//				            	}
+//				            }
+//				            selectCategories.add(temp1);
+//				        }
+						
+						dto.setSelectCategories(selectCategories);
+						
+						redirectAttributes.addAttribute("dto", dto);
+						model.addAttribute("dto", dto);
+						
+						return "redirect:/bookview/editform";
+					}
+					catch (Exception e) {
+						// TODO: handle exception
+						System.out.println("Error Controller InitializeEditBook : ****" + e.getMessage());
+						return "bookview/error";
+					}
 				}
-				catch (Exception e) {
-					// TODO: handle exception
-					System.out.println("Error Controller InitializeEditBook : ****" + e.getMessage());
-					return "bookview/error";
+				else 
+				{
+					redirectAttributes.addFlashAttribute("You do not have right to edit this book");
+					return "redirect:/bookview/editbookid";
 				}
-			}
-			else 
-			{
-				redirectAttributes.addFlashAttribute("You do not have right to edit this book");
-				return "redirect:/bookview/editbookid";
-			}
 			
-		}
-		catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("Error Controller InitializeEditBook : ****" + e.getMessage());
-			return "bookview/error";
-		}
+			}
+			catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("Error Controller InitializeEditBook : ****" + e.getMessage());
+				return "bookview/error";
+			}
 	}
 	
 	@PostMapping("/bookview/editform/{id}")
@@ -187,7 +236,7 @@ public class BookController {
 		try {
 			long personid = -1;
 			//Connect to function to get the personid after login from user.
-			bookService.uploadBook(personid, dto);
+			//bookService.save(dto, person);
 			System.out.println("Successful edit a certain book");
 			return "bookview/success";
 		}catch (Exception e) {

@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import pq.jdev.b001.bookstore.books.model.Upload;
 
 @Repository
-public interface UploadRepository extends JpaRepository<Upload, Long>, CrudRepository<Upload, Long>{
+public interface UploadRepository extends CrudRepository<Upload, Long>{
 	public Upload save(Upload upload);
 }

@@ -50,9 +50,4 @@ public class PublisherController {
 		return "publishersList";
 	}
 
-	@GetMapping("detailPublishers")
-	public String viewDetailPublisher(Model model) {
-		return "detailPublishers";
-	}
-	
 }

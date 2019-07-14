@@ -2,15 +2,14 @@ package pq.jdev.b001.bookstore.books.web.dto;
 
 import java.sql.Date;
 import java.util.List;
-import javax.servlet.http.Part;
 import javax.validation.constraints.NotEmpty;
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
-import pq.jdev.b001.bookstore.books.model.Category;
-import pq.jdev.b001.bookstore.books.model.Publisher;
+import pq.jdev.b001.bookstore.Category.model.Category;
 import pq.jdev.b001.bookstore.books.model.SelectCategory;
 import pq.jdev.b001.bookstore.books.model.SelectPublisher;
+import pq.jdev.b001.bookstore.publisher.models.Publishers;
 
 
 
@@ -26,34 +25,30 @@ public class UploadInformationDTO {
 	private String domain;
 	
 	@Nullable
-	private Part picture;
+	private MultipartFile pictureFile;
 
-	private Date dateupload;
+	private Date uploadedDate;
 	
 	@Nullable
 	private String authors;
 	
 	@Nullable
-	private Publisher publisher;
+	private Publishers publisher;
+	
+	@Nullable
+	private int publishedYear;
 	
 	@Nullable
 	private List<Category> categories;
 	
 	@NotEmpty
-	private MultipartFile file;
-	
-	private String filename;
-	
-	@Nullable
-	private int year;
-	
-	private List<Publisher> listpublishers;
+	private List<MultipartFile> files;
 	
 	private List<SelectPublisher> selectPublishers;
 	
-	private List<Category> listcategories;
-	
 	private List<SelectCategory> selectCategories;
+	
+	private String uploadMessage;
 
 	public String getTitle() {
 		return title;
@@ -79,20 +74,20 @@ public class UploadInformationDTO {
 		this.domain = domain;
 	}
 
-	public Part getPicture() {
-		return picture;
+	public MultipartFile getPictureFile() {
+		return pictureFile;
 	}
 
-	public void setPicture(Part picture) {
-		this.picture = picture;
+	public void setPictureFile(MultipartFile pictureFile) {
+		this.pictureFile = pictureFile;
 	}
 
-	public Date getDateupload() {
-		return dateupload;
+	public Date getUploadedDate() {
+		return uploadedDate;
 	}
 
-	public void setDateupload(Date dateupload) {
-		this.dateupload = dateupload;
+	public void setUploadedDate(Date uploadedDate) {
+		this.uploadedDate = uploadedDate;
 	}
 
 	public String getAuthors() {
@@ -103,12 +98,20 @@ public class UploadInformationDTO {
 		this.authors = authors;
 	}
 
-	public Publisher getPublisher() {
+	public Publishers getPublisher() {
 		return publisher;
 	}
 
-	public void setPublisher(Publisher publisher) {
+	public void setPublisher(Publishers publisher) {
 		this.publisher = publisher;
+	}
+
+	public int getPublishedYear() {
+		return publishedYear;
+	}
+
+	public void setPublishedYear(int publishedYear) {
+		this.publishedYear = publishedYear;
 	}
 
 	public List<Category> getCategories() {
@@ -119,48 +122,20 @@ public class UploadInformationDTO {
 		this.categories = categories;
 	}
 
-	public MultipartFile getFile() {
-		return file;
+	public List<MultipartFile> getFiles() {
+		return files;
 	}
 
-	public void setFile(MultipartFile file) {
-		this.file = file;
+	public void setFiles(List<MultipartFile> files) {
+		this.files = files;
 	}
 
-	public void setFilename(String filename) {
-		this.filename = filename;
+	public List<SelectPublisher> getSelectPublishers() {
+		return selectPublishers;
 	}
 
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int year) {
-		this.year = year;
-	}
-
-	public String getFilename() {
-		return filename;
-	}
-
-	public void setFilenames(String filename) {
-		this.filename = filename;
-	}
-
-	public List<Publisher> getListpublishers() {
-		return listpublishers;
-	}
-
-	public void setListpublishers(List<Publisher> listpublishers) {
-		this.listpublishers = listpublishers;
-	}
-
-	public List<Category> getListcategories() {
-		return listcategories;
-	}
-
-	public void setListcategories(List<Category> listcategories) {
-		this.listcategories = listcategories;
+	public void setSelectPublishers(List<SelectPublisher> selectPublishers) {
+		this.selectPublishers = selectPublishers;
 	}
 
 	public List<SelectCategory> getSelectCategories() {
@@ -171,11 +146,12 @@ public class UploadInformationDTO {
 		this.selectCategories = selectCategories;
 	}
 
-	public List<SelectPublisher> getSelectPublishers() {
-		return selectPublishers;
+	public String getUploadMessage() {
+		return uploadMessage;
 	}
 
-	public void setSelectPublishers(List<SelectPublisher> selectPublishers) {
-		this.selectPublishers = selectPublishers;
+	public void setUploadMessage(String uploadMessage) {
+		this.uploadMessage = uploadMessage;
 	}
+
 }

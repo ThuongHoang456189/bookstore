@@ -1,13 +1,23 @@
 package pq.jdev.b001.bookstore.books.model;
 
+import pq.jdev.b001.bookstore.publisher.models.Publishers;
+
 public class SelectPublisher {
-	private Publisher publisher;
-	private int flag=0;
 	
-	public Publisher getPublisher() {
+	private Publishers publisher;
+	private int flag = 0;
+
+	public SelectPublisher() {
+	}
+	
+	public SelectPublisher(Publishers publisher, int flag) {
+		this.publisher = publisher;
+		this.flag = flag;
+	}
+	public Publishers getPublisher() {
 		return publisher;
 	}
-	public void setPublisher(Publisher publisher) {
+	public void setPublisher(Publishers publisher) {
 		this.publisher = publisher;
 	}
 	public int getFlag() {
@@ -16,4 +26,5 @@ public class SelectPublisher {
 	public void setFlag(int flag) {
 		this.flag = flag;
 	}
+	
 }

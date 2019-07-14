@@ -1,11 +1,16 @@
 package pq.jdev.b001.bookstore.publisher.models;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import pq.jdev.b001.bookstore.books.model.Book;
 
 @Entity(name="Publish")
 @Table(name="publish")
@@ -27,6 +32,9 @@ public class Publishers {
 	
     @Column(name = "UPDATEDATE")
 	private String updateDate ;
+    
+    @OneToMany(mappedBy = "publisher")
+    private Set<Book> books;
 	
 	public Publishers() {
 		
@@ -78,6 +86,14 @@ public class Publishers {
 
 	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
+	}
+
+	public Set<Book> getBooks() {
+		return books;
+	}
+
+	public void setBooks(Set<Book> books) {
+		this.books = books;
 	}
 
 	public Publishers(Long id, String publisher, String createName, String createDate, String updateName,

@@ -14,11 +14,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import pq.jdev.b001.bookstore.books.model.Book;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
@@ -38,6 +41,10 @@ public class Person implements Serializable{
     private String username;
     private String password;
     private Date birthday;
+    
+    @OneToMany(mappedBy = "person")
+    private Set<Book> books;
+    
 
     @CreationTimestamp
     private Timestamp create_date;

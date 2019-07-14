@@ -1,7 +1,9 @@
 package pq.jdev.b001.bookstore.books.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,52 +13,82 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.springframework.lang.Nullable;
-
 @Entity
-@Table(name = "upload", catalog = "book_category_upload")
-public class Upload {
+@Table(name = "upload")
+public class Upload implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2713424559932800332L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private long id;
 	
-	@Nullable
-	@ManyToOne
-	@JoinColumn(name = "BOOKID", nullable = false)
-	private NewBook book;
-	private String filename;
-	private String changefilename;
-	private Date dateupdate;
+	@Column(name = "ORIGINAL_FILE_NAME")
+	private String originalFileName;
+	
+	@Column(name = "MODIFIED_FILE_NAME")
+	private String modifiedFileName;
+	
+	@Column(name = "MODIFIED_FILE_PATH")
+	private String modifiedFilePath;
+	
+	@Column(name = "UPLOADED_DATE")
+	private Date uploadedDate;
+	
+	@ManyToOne( cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
+	@JoinColumn(name = "BOOK_ID")
+	private Book book;
+
 	public long getId() {
 		return id;
 	}
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID", unique = true, nullable = false)
+
 	public void setId(long id) {
 		this.id = id;
 	}
-	public NewBook getBook() {
+
+	public String getOriginalFileName() {
+		return originalFileName;
+	}
+
+	public void setOriginalFileName(String originalFileName) {
+		this.originalFileName = originalFileName;
+	}
+
+	public String getModifiedFileName() {
+		return modifiedFileName;
+	}
+
+	public void setModifiedFileName(String modifiedFileName) {
+		this.modifiedFileName = modifiedFileName;
+	}
+
+	public String getModifiedFilePath() {
+		return modifiedFilePath;
+	}
+
+	public void setModifiedFilePath(String modifiedFilePath) {
+		this.modifiedFilePath = modifiedFilePath;
+	}
+
+	public Date getUploadedDate() {
+		return uploadedDate;
+	}
+
+	public void setUploadedDate(Date uploadedDate) {
+		this.uploadedDate = uploadedDate;
+	}
+
+	public Book getBook() {
 		return book;
 	}
-	public void setBook(NewBook book) {
+
+	public void setBook(Book book) {
 		this.book = book;
 	}
-	public String getFilename() {
-		return filename;
-	}
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
-	public String getChangefilename() {
-		return changefilename;
-	}
-	public void setChangefilename(String changefilename) {
-		this.changefilename = changefilename;
-	}
-	public Date getDateupdate() {
-		return dateupdate;
-	}
-	public void setDateupdate(Date dateupdate) {
-		this.dateupdate = dateupdate;
-	}
+	
 }
