@@ -17,7 +17,42 @@
 	    <!-- <link rel="stylesheet" href="../css/shards.min.css"> -->
 	</head>
   
-
+<!--   <body>
+    <h1>Publisher List</h1>
+    
+    <br/><br/>
+    <div>
+      <table border="1">
+        <tr>
+          <th>ID</th>
+          <th>PUBLISHINGHOUSE </th>
+          <th>CREATEDNAME  </th>
+          <th>CREATEDDATE  </th>
+          <th>UPLOADNAME  </th>
+          <th>UPDATEDATE </th>
+        </tr>
+            <tr th:each="publisher : ${publishers}">
+             <td th:utext="${publisher.ID}"></td>
+             <td th:utext="${publisher.PUBLISHINGHOUSE}"></td>
+             <td th:utext="${publisher.CREATEDNAME}"></td>
+             <td th:utext="${publisher.CREATEDDATE}"></td>
+             <td th:utext="${publisher.UPLOADNAME}"></td>
+             <td th:utext="${publisher.UPDATEDATE}"></td>
+          </tr> 
+         <c:forEach items="${publisher}" var ="publishers">
+         <tr>
+            <td>${publishers.ID} </td>
+            <td>${publishers.PUBLISHINGHOUSE} </td>
+            <td>${publishers.CREATEDNAME}</td>
+            <td>${publishers.CREATEDDATE}</td>
+            <td>${publishers.UPLOADNAME}</td>
+            <td>${publisher.UPDATEDATE}</td>
+        </tr>
+        </c:forEach>   
+        
+      </table>
+    </div>
+  </body> -->
   <body>
     <div class="container my-2">
         <div class="card">
