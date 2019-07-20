@@ -33,11 +33,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr >
-                                        <td ></td>
-                                        <td ></td>
+                                    <tr th:each="category:${categories}">
+                                        <td th:text="${category.id}"></td>
+                                        <td th:text="${category.name}"></td>
+                                        <td th:text="${category.createdate}"></td>
+                                        <td th:text="${category.updatedate}"></td>
                                         <td><a  class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
-                                        <td><a  class="btn btn-primary"><i class="fas fa-user-times ml-2"></i></a></td>
+                                        <td><a th:href="@{categorylist} class="btn btn-primary"><i class="fas fa-user-times ml-2"></i></a></td>
                                     </tr>
                                 </tbody>
                             </table>

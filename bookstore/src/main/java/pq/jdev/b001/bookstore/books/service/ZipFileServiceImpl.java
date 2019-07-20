@@ -18,13 +18,29 @@ public class ZipFileServiceImpl implements ZipFileService{
 	private List<String> originalFileNames;
 	private String sourcePath;
 	
-	public ZipFileServiceImpl(List<String> originalFileNames, String sourcePath) {
-		super();
+	
+	
+	
+	public List<String> getOriginalFileNames() {
+		return originalFileNames;
+	}
+
+
+	public void setOriginalFileNames(List<String> originalFileNames) {
 		this.originalFileNames = originalFileNames;
+	}
+
+
+	public String getSourcePath() {
+		return sourcePath;
+	}
+
+
+	public void setSourcePath(String sourcePath) {
 		this.sourcePath = sourcePath;
 	}
-	
-	
+
+
 	public void zipIt(String zipFile) {
         byte[] buffer = new byte[1024];
         try {

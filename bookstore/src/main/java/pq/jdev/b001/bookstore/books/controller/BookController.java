@@ -51,12 +51,7 @@ public class BookController {
 		return new UploadInformationDTO();
 	}
 	
-	@GetMapping("/")
-	public String home(Model model)
-	{
-		return "index";
-	}
-	
+
 	@GetMapping("/bookview/{personid}")
 	public String showAddEditView(@PathVariable Long personid, Model model)
 	{

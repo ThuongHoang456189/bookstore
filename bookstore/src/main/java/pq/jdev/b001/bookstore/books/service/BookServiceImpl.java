@@ -38,6 +38,9 @@ public class BookServiceImpl implements BookService{
 	private ZipFileService zipFileService;
 	
 	@Autowired
+	private ZipFileServiceImpl zipFileServiceImpl;
+	
+	@Autowired
 	private ServletContext context;
 	
 //	@Autowired
@@ -228,7 +231,9 @@ public class BookServiceImpl implements BookService{
 					//Zipfile
 					File sourceFile = uploadPathService.getFilePath("bookzip", upload.getId()+"");
 					String modifiedFilePath = sourcePath + "uploads" + File.separator + dbUpload.getId() + ".zip";
-					zipFileService = (ZipFileService) new ZipFileServiceImpl(originalFileNames, sourcePath);
+					zipFileServiceImpl = new ZipFileServiceImpl();
+					zipFileServiceImpl.setOriginalFileNames(originalFileNames);
+					zipFileServiceImpl.setSourcePath(sourcePath);
 					zipFileService.generateFileList(sourceFile);
 					zipFileService.zipIt(modifiedFilePath);
 					
