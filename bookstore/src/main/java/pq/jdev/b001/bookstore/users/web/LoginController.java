@@ -13,7 +13,7 @@ public class LoginController {
 	
 	@GetMapping({"/"})
 	public String root() {
-		return "index";
+		return "indexcontainer";
 	}
 	
 	@GetMapping("/login")
