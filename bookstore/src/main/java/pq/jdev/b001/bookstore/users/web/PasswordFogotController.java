@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,7 @@ import pq.jdev.b001.bookstore.users.service.EmailService;
 import pq.jdev.b001.bookstore.users.service.UserService;
 import pq.jdev.b001.bookstore.users.web.dto.PasswordForgotDto;
 
+@PreAuthorize("!(hasRole('EMPLOYEE') OR hasRole('ADMIN'))")
 @Controller
 @RequestMapping("/forgot-password")
 public class PasswordFogotController {

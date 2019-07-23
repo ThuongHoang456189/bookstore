@@ -3,6 +3,7 @@ package pq.jdev.b001.bookstore.users.web;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +16,7 @@ import pq.jdev.b001.bookstore.users.model.Person;
 import pq.jdev.b001.bookstore.users.service.UserService;
 import pq.jdev.b001.bookstore.users.web.dto.UserDto;
 
+@PreAuthorize("!(hasRole('EMPLOYEE') OR hasRole('ADMIN'))")
 @Controller
 @RequestMapping(value = "/registration")
 public class UserRegistrationController {
