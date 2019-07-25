@@ -120,9 +120,18 @@ img {
 	color: #969547;
 }
 
-#templatemo_menu .logout a{
+#templatemo_menu .login a{
 	margin: 0px 0px 0px 250px;
 }
+
+#templatemo_menu .user-admin{
+	float: left;
+}
+#templatemo_menu .user-admin a{
+	margin: 0px 0px 0px 50px;
+}
+
+
 
 #templatemo_menu li a:hover, #templatemo_menu li .current{
 	color: #fcf88e;

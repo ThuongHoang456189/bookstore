@@ -65,7 +65,7 @@ public class PasswordFogotController {
 	        tokenRepository.save(token);
 
 	        Mail mail = new Mail();
-	        mail.setFrom("abc@gmail.com");
+	        mail.setFrom("user1@testmail.com");
 	        mail.setTo(person.getEmail());
 	        mail.setSubject("Password reset request");
 
