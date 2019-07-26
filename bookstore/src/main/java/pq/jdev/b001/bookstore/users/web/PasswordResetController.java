@@ -3,6 +3,7 @@ package pq.jdev.b001.bookstore.users.web;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import pq.jdev.b001.bookstore.users.repository.PasswordResetTokenRepository;
 import pq.jdev.b001.bookstore.users.service.UserService;
 import pq.jdev.b001.bookstore.users.web.dto.PasswordResetDto;
 
+@PreAuthorize("!(hasRole('EMPLOYEE') OR hasRole('ADMIN'))")
 @Controller
 @RequestMapping("/reset-password")
 public class PasswordResetController {

@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class LoginController {
 	
+	
+	@PreAuthorize("!(hasRole('EMPLOYEE') OR hasRole('ADMIN'))")
 	@GetMapping({"/"})
 	public String root() {
 		return "indexcontainer";
 	}
 	
+	@PreAuthorize("!(hasRole('EMPLOYEE') OR hasRole('ADMIN'))")
 	@GetMapping("/login")
 	public String login(Model model) {
 		return "login";
