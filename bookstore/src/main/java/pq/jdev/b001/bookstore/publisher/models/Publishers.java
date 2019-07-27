@@ -12,34 +12,34 @@ import javax.persistence.Table;
 
 import pq.jdev.b001.bookstore.books.model.Book;
 
-@Entity(name="Publish")
-@Table(name="publish")
+@Entity(name = "Publish")
+@Table(name = "publish")
 public class Publishers {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id ;
-    @Column(name = "PUBLISHINGHOUSE")
-	private String publisher ;
-    
-    @Column(name = "CREATEDUSER")
-	private String createName ;
-    
-    @Column(name = "CREATEDDATE")
-	private String createDate ;
-    
-    @Column(name = "UPLOADUSER")
-	private String updateName ;
-	
-    @Column(name = "UPDATEDATE")
-	private String updateDate ;
-    
-    @OneToMany(mappedBy = "publisher")
-    private Set<Book> books;
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	@Column(name = "PUBLISHINGHOUSE")
+	private String publisher;
+
+	@Column(name = "CREATEDUSER")
+	private String createName;
+
+	@Column(name = "CREATEDDATE")
+	private String createDate;
+
+	@Column(name = "UPLOADUSER")
+	private String updateName;
+
+	@Column(name = "UPDATEDATE")
+	private String updateDate;
+
+	@OneToMany(mappedBy = "publisher")
+	private Set<Book> books;
+
 	public Publishers() {
-		
+
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -112,5 +112,5 @@ public class Publishers {
 		return "Publishers [id=" + id + ", publisher=" + publisher + ", createName=" + createName + ", createDate="
 				+ createDate + ", updateName=" + updateName + ", updateDate=" + updateDate + "]";
 	}
-	
+
 }

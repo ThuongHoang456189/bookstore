@@ -8,5 +8,5 @@ import pq.jdev.b001.bookstore.publisher.models.Publishers;
 
 @Repository
 public interface PublisherRepository extends CrudRepository<Publishers, Long>, JpaRepository<Publishers, Long> {
-    
+
 }
