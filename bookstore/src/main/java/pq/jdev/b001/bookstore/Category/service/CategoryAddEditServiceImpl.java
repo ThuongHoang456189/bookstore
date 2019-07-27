@@ -26,6 +26,10 @@ public class CategoryAddEditServiceImpl implements CategoryAddEditService{
 	public List<Category> findAll() {
 		return (List<Category>) categoryrepository.findAll();
 	}
+	@Override
+	public List<Category> findByName(String name) {
+		return (List<Category>) categoryrepository.findByName(name);
+	}
 
 
 
