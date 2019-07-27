@@ -38,4 +38,24 @@ public class PublisherServiceImpl implements PublisherService {
 		return publisherRepository.count();
 	}
 
+	@Override
+	public void delete(int id) {
+		// TODO Auto-generated method stub
+		publisherRepository.deleteById((long) id);
+	}
+
+	@Override
+	public Publishers findOne(int id) {
+		// TODO Auto-generated method stub
+		return publisherRepository.findOne(id);
+	}
+
+	@Override
+	public void save(Publishers contact) {
+		// TODO Auto-generated method stub
+		publisherRepository.save(contact);
+	}
+
+	
+
 }

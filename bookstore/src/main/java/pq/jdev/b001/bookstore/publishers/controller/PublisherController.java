@@ -5,17 +5,21 @@ import java.util.List;
 //import java.util.concurrent.Flow.Publisher;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import pq.jdev.b001.bookstore.publisher.models.Publishers;
 import pq.jdev.b001.bookstore.publishers.repository.PublisherRepository;
@@ -58,11 +62,33 @@ public class PublisherController {
 	}
 
 	public String viewDetail(Model model) {
+		
 		return "detailPublishers";
 	}
 
+	@GetMapping("/publisher/{id}/delete")
+	public String delete(@PathVariable int id, RedirectAttributes redirect) {
+		publisherService.delete(id);
+		return "redirect:/publishersList";
+	}
+	
+	@GetMapping("/publisher/{id}/edit")
+	public String edit(@PathVariable int id, Model model) {
+		model.addAttribute("publisher", publisherService.find(id));
+		return "detailPublishers";
+	}
+	
+	@PostMapping("/publisher/save")
+	public String save(@Valid Publishers publishers, BindingResult result, RedirectAttributes redirect) {
+		if (result.hasErrors()) {
+			return "detailPublishers";
+			}
+		publisherService.save(publishers);
+		return "redirect:/publishersList";
+		}
+	
 	@GetMapping("/publishersList/page/{pageNumber}")
-	public String showEmployeePage(HttpServletRequest request,
+	public String showPage(HttpServletRequest request,
 
 			@PathVariable int pageNumber, Model model) {
 		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("publiserList");

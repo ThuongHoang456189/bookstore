@@ -15,4 +15,7 @@ public interface PublisherService {
 	public Publishers find(long publisherId);
 
 	public Long count();
+	void delete(int id);
+	Publishers findOne(int id);
+	void save(Publishers contact);
 }
