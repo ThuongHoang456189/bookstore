@@ -87,6 +87,15 @@ public class PublisherController {
 		return "redirect:/publishersList";
 		}
 	
+	/*
+	 * @GetMapping("/publisher/search") public String search(@RequestParam("s")
+	 * String s, Model model) { if (s.equals("")) { return
+	 * "redirect:/publishersList"; }
+	 * 
+	 * model.addAttribute("publisher", publisherService.search(s)); return
+	 * "publishersList"; }
+	 */
+	
 	@GetMapping("/publishersList/page/{pageNumber}")
 	public String showPage(HttpServletRequest request,
 

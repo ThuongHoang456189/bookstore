@@ -1,10 +1,14 @@
 package pq.jdev.b001.bookstore.books.service;
 
 import java.io.File;
+import java.io.IOException;
 
 public interface ZipFileService {
 
-	void zipIt(String zipFile);
+	public void zipDirectory(File dir, String zipDirName);
 
-	void generateFileList(File node);
+	public int populateFilesList(File dir) throws IOException;
+
+	public void zipSingleFile(File file, String zipFileName);
+
 }

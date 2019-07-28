@@ -13,7 +13,8 @@ public interface PublisherService {
 	public void deletePublisher(int publisherId);
 
 	public Publishers find(long publisherId);
-
+	/* List<Publishers> search(String q); */
+	
 	public Long count();
 	void delete(int id);
 	Publishers findOne(int id);

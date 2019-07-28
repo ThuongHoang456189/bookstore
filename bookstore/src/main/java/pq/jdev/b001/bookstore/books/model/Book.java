@@ -23,7 +23,7 @@ import pq.jdev.b001.bookstore.users.model.Person;
 
 @Entity
 @Table(name = "books")
-public class Book implements Serializable{
+public class Book implements Serializable {
 
 	/**
 	 * 
@@ -34,40 +34,41 @@ public class Book implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private long id;
-	
+
 	@Column(name = "TITLE")
 	private String title;
-	
-	@Column(name = "PRICE ")
+
+	@Column(name = "PRICE")
 	private long price;
-	
+
 	@Column(name = "DOMAIN")
 	private String domain;
-	
+
 	@Column(name = "PICTURE")
 	private String picture;
-	
+
 	@Column(name = "UPLOADED_DATE")
 	private Date uploadedDate;
-	
+
 	@Column(name = "AUTHORS")
 	private String authors;
-	
-	@ManyToOne( cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
+
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "PERSON_ID")
 	private Person person;
-	
-	@ManyToOne( cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
+
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "PUBLISHER_ID ")
 	private Publishers publisher;
-	
-	@ManyToMany(targetEntity = pq.jdev.b001.bookstore.Category.model.Category.class, cascade={CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinTable(name = "book_category", joinColumns = @JoinColumn(name = "BOOK_ID"), inverseJoinColumns = @JoinColumn(name = "CATEGORY_ID"))
-	private Set<Category>categories;
-	
+
+	@ManyToMany(cascade = { CascadeType.ALL })
+	@JoinTable(name = "book_category", joinColumns = { @JoinColumn(name = "BOOK_ID") }, inverseJoinColumns = {
+			@JoinColumn(name = "CATEGORY_ID") })
+	private Set<Category> categories;
+
 	@OneToMany(mappedBy = "book")
 	private Set<Upload> uploads;
-	
+
 	@Column(name = "PUBLISHED_YEAR")
 	private int publishedYear;
 
@@ -166,5 +167,5 @@ public class Book implements Serializable{
 	public void setPublishedYear(int publishedYear) {
 		this.publishedYear = publishedYear;
 	}
-	
+
 }

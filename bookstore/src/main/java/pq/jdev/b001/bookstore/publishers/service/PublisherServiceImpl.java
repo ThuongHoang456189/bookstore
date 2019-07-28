@@ -56,6 +56,11 @@ public class PublisherServiceImpl implements PublisherService {
 		publisherRepository.save(contact);
 	}
 
+	/*
+	 * @Override public List<Publishers> search(String name) { // TODO
+	 * Auto-generated method stub return publisherRepository.findByName(name); }
+	 */
+
 	
 
 }
