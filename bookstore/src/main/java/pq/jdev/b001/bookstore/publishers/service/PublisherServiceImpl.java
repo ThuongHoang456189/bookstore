@@ -47,7 +47,7 @@ public class PublisherServiceImpl implements PublisherService {
 	@Override
 	public Publishers findOne(int id) {
 		// TODO Auto-generated method stub
-		return publisherRepository.findOne(id);
+		return publisherRepository.findById((long) id).get();
 	}
 
 	@Override
