@@ -10,18 +10,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class UploadPathServiceImpl implements UploadPathService{
+public class UploadPathServiceImpl implements UploadPathService {
 
 	@Autowired
 	ServletContext context;
-	
+
 	public File getFilePath(String modifiedFileName, String path) {
-		boolean exists = new File(context.getRealPath("/"+path+"/")).exists();
-		if(!exists) {
-			new File(context.getRealPath("/"+path+"/")).mkdir();
+		boolean exists = new File(context.getRealPath("/" + path + "/")).exists();
+		if (!exists) {
+			new File(context.getRealPath("/" + path + "/")).mkdir();
 		}
-		String modifiedFilePath  = context.getRealPath("/"+path+"/"+File.separator+modifiedFileName);
-		//System.out.println(modifiedFilePath);
+		String modifiedFilePath = context.getRealPath("/" + path + "/" + File.separator + modifiedFileName);
 		File file = new File(modifiedFilePath);
 		return file;
 	}

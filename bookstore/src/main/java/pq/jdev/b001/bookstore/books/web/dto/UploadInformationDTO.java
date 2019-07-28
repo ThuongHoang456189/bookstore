@@ -8,46 +8,45 @@ import org.springframework.web.multipart.MultipartFile;
 
 import pq.jdev.b001.bookstore.Category.model.Category;
 import pq.jdev.b001.bookstore.books.model.SelectCategory;
-import pq.jdev.b001.bookstore.books.model.SelectPublisher;
 import pq.jdev.b001.bookstore.publisher.models.Publishers;
-
-
-
 
 public class UploadInformationDTO {
 	@NotEmpty
 	private String title;
-	
+
 	@Nullable
 	private long price;
-	
+
 	@Nullable
 	private String domain;
-	
+
 	@Nullable
 	private MultipartFile pictureFile;
 
 	private Date uploadedDate;
-	
+
 	@Nullable
 	private String authors;
-	
-	@Nullable
-	private Publishers publisher;
-	
+
+	private Long publisherId;
+
+	private List<Publishers> publishers;
+
 	@Nullable
 	private int publishedYear;
 	
+	private List<String> categoriesId;
+
 	@Nullable
 	private List<Category> categories;
-	
+
 	@NotEmpty
 	private List<MultipartFile> files;
-	
-	private List<SelectPublisher> selectPublishers;
-	
+
+	private MultipartFile folder;
+
 	private List<SelectCategory> selectCategories;
-	
+
 	private String uploadMessage;
 
 	public String getTitle() {
@@ -98,12 +97,20 @@ public class UploadInformationDTO {
 		this.authors = authors;
 	}
 
-	public Publishers getPublisher() {
-		return publisher;
+	public Long getPublisherId() {
+		return publisherId;
 	}
 
-	public void setPublisher(Publishers publisher) {
-		this.publisher = publisher;
+	public void setPublisherId(Long publisherId) {
+		this.publisherId = publisherId;
+	}
+
+	public List<Publishers> getPublishers() {
+		return publishers;
+	}
+
+	public void setPublishers(List<Publishers> publishers) {
+		this.publishers = publishers;
 	}
 
 	public int getPublishedYear() {
@@ -112,6 +119,14 @@ public class UploadInformationDTO {
 
 	public void setPublishedYear(int publishedYear) {
 		this.publishedYear = publishedYear;
+	}
+
+	public List<String> getCategoriesId() {
+		return categoriesId;
+	}
+
+	public void setCategoriesId(List<String> categoriesId) {
+		this.categoriesId = categoriesId;
 	}
 
 	public List<Category> getCategories() {
@@ -130,12 +145,12 @@ public class UploadInformationDTO {
 		this.files = files;
 	}
 
-	public List<SelectPublisher> getSelectPublishers() {
-		return selectPublishers;
+	public MultipartFile getFolder() {
+		return folder;
 	}
 
-	public void setSelectPublishers(List<SelectPublisher> selectPublishers) {
-		this.selectPublishers = selectPublishers;
+	public void setFolder(MultipartFile folder) {
+		this.folder = folder;
 	}
 
 	public List<SelectCategory> getSelectCategories() {

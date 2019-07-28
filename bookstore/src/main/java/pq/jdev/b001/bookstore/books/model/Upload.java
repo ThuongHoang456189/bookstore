@@ -15,8 +15,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "upload")
-public class Upload implements Serializable{
-	
+public class Upload implements Serializable {
+
 	/**
 	 * 
 	 */
@@ -26,20 +26,20 @@ public class Upload implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private long id;
-	
+
 	@Column(name = "ORIGINAL_FILE_NAME")
 	private String originalFileName;
-	
+
 	@Column(name = "MODIFIED_FILE_NAME")
 	private String modifiedFileName;
-	
+
 	@Column(name = "MODIFIED_FILE_PATH")
 	private String modifiedFilePath;
-	
+
 	@Column(name = "UPLOADED_DATE")
 	private Date uploadedDate;
-	
-	@ManyToOne( cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
+
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "BOOK_ID")
 	private Book book;
 
@@ -90,5 +90,5 @@ public class Upload implements Serializable{
 	public void setBook(Book book) {
 		this.book = book;
 	}
-	
+
 }

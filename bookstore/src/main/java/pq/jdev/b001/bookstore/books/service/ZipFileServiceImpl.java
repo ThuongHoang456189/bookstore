@@ -4,91 +4,108 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import javax.transaction.Transactional;
 
-@Service
+import org.springframework.stereotype.Controller;
+
 @Transactional
-public class ZipFileServiceImpl implements ZipFileService{
+@Controller
+public class ZipFileServiceImpl implements ZipFileService {
+	List<String> filesListInDir = new ArrayList<String>();
 
-	private List<String> originalFileNames;
-	private String sourcePath;
-	
-	
-	
-	
-	public List<String> getOriginalFileNames() {
-		return originalFileNames;
+	/**
+	 * This method zips the directory
+	 * 
+	 * @param dir
+	 * @param zipDirName
+	 */
+	public void zipDirectory(File dir, String zipDirName) {
+		try {
+			populateFilesList(dir);
+			// now zip files one by one
+			// create ZipOutputStream to write to the zip file
+			FileOutputStream fos = new FileOutputStream(zipDirName);
+			ZipOutputStream zos = new ZipOutputStream(fos);
+			for (String filePath : filesListInDir) {
+				System.out.println("Zipping " + filePath);
+				// for ZipEntry we need to keep only relative file path, so we used substring on
+				// absolute path
+				ZipEntry ze = new ZipEntry(filePath.substring(dir.getAbsolutePath().length() + 1, filePath.length()));
+				zos.putNextEntry(ze);
+				// read the file and write to ZipOutputStream
+				FileInputStream fis = new FileInputStream(filePath);
+				byte[] buffer = new byte[1024];
+				int len;
+				while ((len = fis.read(buffer)) > 0) {
+					zos.write(buffer, 0, len);
+				}
+				zos.closeEntry();
+				fis.close();
+			}
+			zos.close();
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-
-	public void setOriginalFileNames(List<String> originalFileNames) {
-		this.originalFileNames = originalFileNames;
+	/**
+	 * This method populates all the files in a directory to a List
+	 * 
+	 * @param dir
+	 * @throws IOException
+	 */
+	public int populateFilesList(File dir) throws IOException {
+		File[] files = dir.listFiles();
+		int regularFile = 0;
+		for (File file : files) {
+			if (file.isFile()) {
+				filesListInDir.add(file.getAbsolutePath());
+				regularFile++;
+			} else
+				populateFilesList(file);
+		}
+		return regularFile;
 	}
 
+	/**
+	 * This method compresses the single file to zip format
+	 * 
+	 * @param file
+	 * @param zipFileName
+	 */
+	public void zipSingleFile(File file, String zipFileName) {
+		try {
+			// create ZipOutputStream to write to the zip file
+			FileOutputStream fos = new FileOutputStream(zipFileName);
+			ZipOutputStream zos = new ZipOutputStream(fos);
+			// add a new Zip Entry to the ZipOutputStream
+			ZipEntry ze = new ZipEntry(file.getName());
+			zos.putNextEntry(ze);
+			// read the file and write to ZipOutputStream
+			FileInputStream fis = new FileInputStream(file);
+			byte[] buffer = new byte[1024];
+			int len;
+			while ((len = fis.read(buffer)) > 0) {
+				zos.write(buffer, 0, len);
+			}
 
-	public String getSourcePath() {
-		return sourcePath;
+			// Close the zip entry to write to zip file
+			zos.closeEntry();
+			// Close resources
+			zos.close();
+			fis.close();
+			fos.close();
+			System.out.println(file.getCanonicalPath() + " is zipped to " + zipFileName);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
-
-
-	public void setSourcePath(String sourcePath) {
-		this.sourcePath = sourcePath;
-	}
-
-
-	public void zipIt(String zipFile) {
-        byte[] buffer = new byte[1024];
-        try {
-            FileOutputStream fos = new FileOutputStream(zipFile);
-            ZipOutputStream zos = new ZipOutputStream(fos);
-
-            System.out.println("Output to Zip : " + zipFile);
-            
-            
-
-            for (String file: originalFileNames) {
-                System.out.println("File Added : " + file);
-                ZipEntry ze = new ZipEntry(file);
-                zos.putNextEntry(ze);
-                FileInputStream fin = new FileInputStream(sourcePath + File.separator + file);
-                int len;
-                    while ((len = fin .read(buffer)) > 0) {
-                        zos.write(buffer, 0, len);
-                    }
-                    fin.close();
-                }
-
-            zos.closeEntry();
-            System.out.println("Folder successfully compressed");
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-	}
-
-	
-	public void generateFileList(File node) {
-	        // add file only
-	        if (node.isFile()) {
-	        	originalFileNames.add(generateZipEntry(node.getAbsolutePath().toString()));
-	        }
-
-	        if (node.isDirectory()) {
-	            String[] subNote = node.list();
-	            for (String filename: subNote) {
-	                generateFileList(new File(node, filename));
-	            }
-	        }
-	    }
-		
-
-	public String generateZipEntry(String file) {
-	        return file.substring(sourcePath.length() + 1, file.length());
-	    }
-	
 }
