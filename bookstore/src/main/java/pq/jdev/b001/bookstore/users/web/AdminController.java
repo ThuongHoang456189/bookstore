@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import pq.jdev.b001.bookstore.users.model.Person;
 import pq.jdev.b001.bookstore.users.model.Role;
-import pq.jdev.b001.bookstore.users.repository.UserRepository;
 import pq.jdev.b001.bookstore.users.service.UserService;
 import pq.jdev.b001.bookstore.users.web.dto.AdminUpdateInfoUserDto;
 import pq.jdev.b001.bookstore.users.web.dto.UserUpdateInfoDto;
@@ -41,16 +40,13 @@ public class AdminController {
 	private UserService userService;
 	
 	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	//tao list
 	@ModelAttribute("list")
 	public List<Person> getList(Principal principal) {
 		String username = principal.getName(); 
-		Person per = userRepository.findByUsername(username);
+		Person per = userService.findByUsername(username);
 		List<Person> oldList = userService.findAll(); 
 		List<Person> newList = new ArrayList<Person>();
 		int key = per.getPower();
@@ -70,7 +66,7 @@ public class AdminController {
 	public List<String> allRoles(Principal principal) {
 		ArrayList<String> kq = new ArrayList<>();
 		String username = principal.getName();
-		Person per = userRepository.findByUsername(username);
+		Person per = userService.findByUsername(username);
 		Set<Role> roles = per.getRoles();
 		String key = null;
 		for (Role role : roles) {
@@ -161,8 +157,8 @@ public class AdminController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = { "/delete-user-{id}" })
 	public String deleteUser(@PathVariable long id, Principal principal, HttpServletRequest request, HttpServletResponse response) {
-		int key_user_delete = userRepository.findById(id).getPower();
-		Person p = userRepository.findByUsername(principal.getName());
+		int key_user_delete = userService.findById(id).getPower();
+		Person p = userService.findByUsername(principal.getName());
 		int key_admin  = p.getPower();
 		
 		if (id == p.getId()){
@@ -173,8 +169,11 @@ public class AdminController {
 		}
 	
 		if (key_admin >= key_user_delete)
-				userService.delete(id);
-	    
+		{
+			userService.deleteTokenByIdPerson(id);
+			userService.delete(id);
+		}
+		
 		return "redirect:/listUser";
 	}
 }

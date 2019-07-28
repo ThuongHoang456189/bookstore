@@ -18,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import pq.jdev.b001.bookstore.users.model.PasswordResetToken;
 import pq.jdev.b001.bookstore.users.model.Person;
-import pq.jdev.b001.bookstore.users.repository.PasswordResetTokenRepository;
 import pq.jdev.b001.bookstore.users.service.UserService;
 import pq.jdev.b001.bookstore.users.web.dto.PasswordResetDto;
 
@@ -31,9 +30,6 @@ public class PasswordResetController {
 	private UserService userService;
 	
 	@Autowired
-	private PasswordResetTokenRepository tokenRepository;
-	
-	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
 	@ModelAttribute("passwordResetForm")
@@ -44,7 +40,7 @@ public class PasswordResetController {
 	@GetMapping
 	public String displayResetPasswordPage(@RequestParam(required = false) String token, Model model) {
 
-		PasswordResetToken resetToken = tokenRepository.findByToken(token);
+		PasswordResetToken resetToken = userService.findByToken(token);
 		if (resetToken == null) {
 			model.addAttribute("error", "Could not find password reset token.");
 		} else if (resetToken.isExpired()) {
@@ -67,11 +63,11 @@ public class PasswordResetController {
 			return "redirect:/reset-password?token=" + form.getToken();
 		}
 
-		PasswordResetToken token = tokenRepository.findByToken(form.getToken());
+		PasswordResetToken token = userService.findByToken(form.getToken());
 		Person person = token.getPerson();
 		String updatedPassword = passwordEncoder.encode(form.getPassword());
 		userService.updatePassword(updatedPassword, person.getId());
-		tokenRepository.delete(token);
+		userService.deleteByToken(token);
 		return "redirect:/login?resetSuccess";
 	}
 }

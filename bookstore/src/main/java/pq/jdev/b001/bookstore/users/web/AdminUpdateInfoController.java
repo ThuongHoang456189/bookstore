@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import pq.jdev.b001.bookstore.users.model.Person;
-import pq.jdev.b001.bookstore.users.repository.UserRepository;
 import pq.jdev.b001.bookstore.users.service.UserService;
 import pq.jdev.b001.bookstore.users.web.dto.UserUpdateInfoDto;
 
@@ -36,15 +35,12 @@ public class AdminUpdateInfoController {
 	private UserService userService;
 	
 	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
 	@ModelAttribute("person")
 	public UserUpdateInfoDto updateInfoDto(Principal principal) {
 		String username = principal.getName(); 
-		Person p = userRepository.findByUsername(username);
+		Person p = userService.findByUsername(username);
 		return userService.updateInfo(p);
 	}
 	
@@ -102,6 +98,7 @@ public class AdminUpdateInfoController {
         if (auth != null){    
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
+        userService.deleteTokenByIdPerson(id);
 		userService.delete(id);
 		return "redirect:/";
 	}

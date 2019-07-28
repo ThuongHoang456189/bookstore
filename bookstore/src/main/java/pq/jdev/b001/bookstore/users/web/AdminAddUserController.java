@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import pq.jdev.b001.bookstore.users.model.Person;
 import pq.jdev.b001.bookstore.users.model.Role;
-import pq.jdev.b001.bookstore.users.repository.UserRepository;
 import pq.jdev.b001.bookstore.users.service.UserService;
 import pq.jdev.b001.bookstore.users.web.dto.AdminDto;
 
@@ -31,9 +30,6 @@ public class AdminAddUserController {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private UserRepository userRepository;
-	
 	@ModelAttribute("person")
 	public AdminDto adminDto() {
 		return new AdminDto();
@@ -48,7 +44,7 @@ public class AdminAddUserController {
 	public List<String> allRoles(Principal principal) {
 		ArrayList<String> kq = new ArrayList<>();
 		String username = principal.getName();
-		Person per = userRepository.findByUsername(username);
+		Person per = userService.findByUsername(username);
 		Set<Role> roles = per.getRoles();
 		String key = null;
 		for (Role role : roles) {
