@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -31,9 +32,12 @@ public class Person implements Serializable{
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+	@Column(columnDefinition = "VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin")
     private String firstname;
+	@Column(columnDefinition = "VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin")
     private String lastname;
     private String phone;
+    @Column(columnDefinition = "VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin")
     private String Address;
     private String email;
     private String sex;
