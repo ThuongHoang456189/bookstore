@@ -70,16 +70,18 @@ public class BookServiceImpl implements BookService {
 	 * information
 	 */
 	public boolean checkInput(UploadInformationDTO dto) {
-		if (!(dto.getTitle().equals("")) && (!dto.getCategories().isEmpty()) && (!dto.getPublishers().isEmpty())) {
-			for (MultipartFile file : dto.getFiles()) {
-				if (file != null && StringUtils.hasText(file.getOriginalFilename())) {
-					return true;
+		if (!dto.getTitle().equals("")) {
+			if (dto.getPublisherId() >= 0) {
+				for (MultipartFile file : dto.getFiles()) {
+					if (file != null && StringUtils.hasText(file.getOriginalFilename())) {
+						return true;
+					}
 				}
 			}
 		}
 		return false;
 	}
-
+	
 	/** Method save is used to insert a new book to database */
 	public UploadInformationDTO save(UploadInformationDTO dto, Person person, List<String> categoriesId)
 			throws Exception {
@@ -406,6 +408,7 @@ public class BookServiceImpl implements BookService {
 			for (Category category : book.getCategories()) {
 				stringCategories += category;
 			}
+			temp.setCurrentBook(book);
 			books.add(temp);
 			temp = new BookDTO();
 		}
