@@ -1,21 +1,22 @@
 * {
-    font-family: Verdana; /* Change your font family */
+    font-family: Verdana; 
   }
   
   .content-table {
     border-collapse: collapse;
-    margin: 31px;
+    margin: 31px auto;
     padding-left: 20px;
     background-color: rgba(255,255,255);
     color: black;
     align-content: center;
-    font-size: 20px;
+    font-size: 18px;
     border-radius: 5px 5px 0 0;
     overflow: hidden;
   }
   
   .content-table thead tr {
-    color: rgb(26, 238, 18);
+    background-color: #0fcf39;
+    color: whitesmoke;
     text-align: left;
     font-weight: bold;
   }
@@ -38,6 +39,9 @@
     color: #009879;
   }
   
+  .content-table tbody tr:nth-child(even) {
+    background: #e8eeef;
+  }
 
   .container {
   display: flex;
@@ -48,7 +52,7 @@
   
   .searchbar {
     float: right;
-    background-color: #D03237;
+    background-color: rgb(23, 216, 81);
     color: white;
     padding: 6px 10px;
     width: 120px;
@@ -56,7 +60,7 @@
     margin-top: 1px;
     margin-right: 8px;
     font-family: "Segoe UI Light","Segoe UI","Segoe",Tahoma,Helvetica,Arial,sans-serif;
-    font-size: 1em;
+    font-size: 0.8em;
     font-weight: bold;
     border-bottom: white solid 2px;
     transition: 0.3s;
@@ -67,7 +71,7 @@
     font-family: "Segoe UI Light","Segoe UI","Segoe",Tahoma,Helvetica,Arial,sans-serif;
     font-size: 1em;
     font-weight: bold;
-    /* transition: 0.2s; */
+    transition: 0.2s; 
 }
 
 .searchbar:focus {
@@ -90,4 +94,29 @@
     padding-top: 5px;
     margin-right: 40px;
 }
-  
+/* Pagination */
+
+.center {
+  text-align: center;
+}
+
+.pagination {
+  display: inline-block;
+  margin-left: 12px auto;
+  text-align: center;
+}
+
+.pagination a {
+  color: white;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+}
+
+.pagination a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
