@@ -16,13 +16,13 @@
 	<nav th:replace="indexheader :: header" ></nav>
 	<div id="templatemo_container">
 		<div id="templatemo_content">
-
+		<br></br>
 			<div id="templatemo_content_left">
 				<div class="templatemo_content_left_section">
 					<h1>Categories</h1>
 					<ul>
-						<li><a href="categorylist">Category</a></li>
-						<li><a href="subpage.html">Proin vulputate justo</a></li>
+						<li><a th:href="@{/categorylist}">Category</a></li>
+						<li><a th:href="subpage.html">Proin vulputate justo</a></li>
 						<li><a href="#">In sed risus ac feli</a></li>
 						<li><a href="#">Aliquam tristique dolor</a></li>
 						<li><a href="#">Maece nas metus</a></li>
@@ -48,7 +48,6 @@
 								Photos</a></li>
 					</ul>
 				</div>
-
 				<div class="templatemo_content_left_section">
 					<a href="http://validator.w3.org/check?uri=referer"><img
 						style="border: 0; width: 88px; height: 31px"
@@ -64,10 +63,10 @@
 			<!-- end of content left -->
 			<nav th:replace="content-right :: right"></nav>
 			<div class="cleaner_with_height">&nbsp;</div>
+			<footer th:replace="indexheader :: footer"></footer>
 		</div>
 		<!-- end of content -->
 	</div>
-	<footer th:replace="indexheader :: footer"></footer>
 </body>
 
 </html>

@@ -4,44 +4,76 @@
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-<link rel="stylesheet" type="text/css"
-	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
+<link th:href="@{/css/templatemo_style.css}" rel="stylesheet"
+	type="text/css" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<style>
+a.back {
+	padding: 0px 100px 0px 50px;
+	font-size: 150%;
+	background: #4b4743;
+}
+;
+</style>
 <title>Admin Registration</title>
 </head>
+
 <body>
-	<nav class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed"
-					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-					aria-controls="navbar">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#" th:href="@{/admin}">Book Store</a>
+	<div id="templatemo_container">
+		<div id="templatemo_menu">
+			<ul>
+				<li><a th:href="@{/admin}">Home</a></li>
+				<li><a href="#" class="current">Search</a></li>
+				<li><a href="index.html">Books</a></li>
+				<li><a href="index.html">New Releases</a></li>
+				<li><a href="#">Company</a></li>
+				<li><a href="#">Contact</a></li>
+			</ul>
+			<div class="user-admin">
+				<a th:href="@{/listUser}">List Account</a> <a
+					th:href="@{/accountAdmin}">My Account</a> <a th:href="@{/logout}">Logout</a>
 			</div>
 		</div>
-	</nav>
+		<br> <br>
+		<div id="templatemo_header">
+			<div id="templatemo_special_offers">
+				<p>
+					<span>25%</span> discounts for purchase over $ 40
+				</p>
+				<a href="#" style="margin-left: 50px;">Read more...</a>
+			</div>
 
-	<br>
-	<br>
-	<a th:href="@{/listUser}">Back Admin</a></span>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-6 col-md-offset-3">
 
-				<div th:if="${param.success}">
-					<script type="text/javascript">
-						window.location.href = "/listUser";
-					</script>
-				</div>
+			<div id="templatemo_new_books">
+				<ul>
+					<li>Suspen disse</li>
+					<li>Maece nas metus</li>
+					<li>In sed risus ac feli</li>
+				</ul>
+				<a href="#" style="margin-left: 50px;">Read more...</a>
+			</div>
+		</div>
+		<div class="container">
+			<div class="ss">
+				<h1 class="text-center">Admin Registration Form</h1>
+			</div>
 
-				<h1>Admin Registration Form </h1>
-				<form th:action="@{/userList/adminAddUser}" th:object="${person}" method="post">
+			<div class="aa">
+				<a class="back" th:href="@{/listUser}">Back Admin</a> </span>
+			</div>
+		</div>
+		<div class="col-md-6 col-md-offset-3">
+			<div th:if="${param.success}">
+				<script type="text/javascript">
+					window.location.href = "/listUser";
+				</script>
+			</div>
+		</div>
+		<div class="container">
+			<div class="regis">
+				<form th:action="@{/userList/adminAddUser}" th:object="${person}"
+					method="post">
 
 					<p class="error-message" th:if="${#fields.hasGlobalErrors()}"
 						th:each="error : ${#fields.errors('global')}" th:text="${error}">Validation
@@ -55,7 +87,7 @@
 							th:each="error: ${#fields.errors('firstName')}"
 							th:text="${error}">Validation error</p>
 					</div>
-					
+
 					<div class="form-group"
 						th:classappend="${#fields.hasErrors('lastName')}? 'has-error':''">
 						<label for="lastName" class="control-label">Last name</label> <input
@@ -64,32 +96,31 @@
 							th:each="error : ${#fields.errors('lastName')}"
 							th:text="${error}">Validation error</p>
 					</div>
-					
+
 					<div class="form-group">
 						<label for="phone" class="control-label">Phone</label> <input
 							id="phone" class="form-control" th:field="*{phone}" />
 					</div>
-					
+
 					<div class="form-group">
 						<label for="address" class="control-label">Address</label> <input
 							id="address" class="form-control" th:field="*{address}" />
 					</div>
-					
+
 					<div class="form-group">
 						<label>Sex:</label>
 						<ul>
-  							<li th:each="radioValue: ${singleSelectAllValues}">
-    							<input type="radio" th:field="*{sex}" th:value="${radioValue}" />
-   								<label th:for="${#ids.prev('sex')}" th:text="${radioValue}"></label>
-  							</li>
+							<li th:each="radioValue: ${singleSelectAllValues}"><input
+								type="radio" th:field="*{sex}" th:value="${radioValue}" /> <label
+								th:for="${#ids.prev('sex')}" th:text="${radioValue}"></label></li>
 						</ul>
 					</div>
-					
+
 					<div class="form-group">
-						<label>BirthDay</label>
-                    	<input type="date" name="birthday" id="birthday" value="1945-01-01">
+						<label>BirthDay</label> <input type="date" name="birthday"
+							id="birthday" value="1945-01-01">
 					</div>
-					
+
 					<div class="form-group"
 						th:classappend="${#fields.hasErrors('email')}? 'has-error':''">
 						<label for="email" class="control-label">E-mail</label> <input
@@ -98,25 +129,24 @@
 							th:each="error : ${#fields.errors('email')}" th:text="${error}">Validation
 							error</p>
 					</div>
-					
+
 					<div class="form-group">
-						<label> power: </label>
-						<select th:field="*{dropdownSelectedValue}">
-    						<option th:each="dropdownValue: ${allRoles}"
-    								th:value="${dropdownValue}"
-    								th:text="${dropdownValue}"></option>
-    					</select>
-					</div>			
-					
+						<label> power: </label> <select
+							th:field="*{dropdownSelectedValue}">
+							<option th:each="dropdownValue: ${allRoles}"
+								th:value="${dropdownValue}" th:text="${dropdownValue}"></option>
+						</select>
+					</div>
+
 					<div class="form-group"
 						th:classappend="${#fields.hasErrors('userName')}? 'has-error':''">
 						<label for="userName" class="control-label">UserName</label> <input
 							id="userName" class="form-control" th:field="*{userName}" />
 						<p class="error-message"
-							th:each="error: ${#fields.errors('userName')}"
-							th:text="${error}">Validation error</p>
+							th:each="error: ${#fields.errors('userName')}" th:text="${error}">Validation
+							error</p>
 					</div>
-					
+
 					<div class="form-group"
 						th:classappend="${#fields.hasErrors('password')}? 'has-error':''">
 						<label for="password" class="control-label">Password</label> <input
@@ -126,16 +156,23 @@
 							th:each="error : ${#fields.errors('password')}"
 							th:text="${error}">Validation error</p>
 					</div>
-					
+
 					<div class="form-group">
-						<button type="submit" class="btn btn-success">Register</button>
+						<div id="gg">
+							<button type="submit" class="btn btn-success">Register</button>
+						</div>
 					</div>
 
 				</form>
 			</div>
 		</div>
 	</div>
-
+	<div id="templatemo_footer">
+			<a href="">Home</a> | <a href="index.html">Search</a> | <a
+				href="index.html">Books</a> | <a href="#">New Releases</a> | <a
+				href="#">FAQs</a> | <a href="#">Contact Us</a><br /> Copyright ©
+			2024 <a href="#"><strong>Your Company Name</strong></a>
+		</div>
 	<script type="text/javascript"
 		th:src="@{/webjars/jquery/3.2.1/jquery.min.js/}"></script>
 	<script type="text/javascript"

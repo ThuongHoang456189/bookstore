@@ -39,8 +39,27 @@
 				<a th:href="@{/logout}">Logout</a>
 			</div>
 		</div>
-		<div>
-			<h1>List's User</h1>
+	
+		<div id="templatemo_header">
+			<div id="templatemo_special_offers">
+				<p>
+					<span>25%</span> discounts for purchase over $ 40
+				</p>
+				<a href="#" style="margin-left: 50px;">Read more...</a>
+			</div>
+
+
+			<div id="templatemo_new_books">
+				<ul>
+					<li>Suspen disse</li>
+					<li>Maece nas metus</li>
+					<li>In sed risus ac feli</li>
+				</ul>
+				<a href="#" style="margin-left: 50px;">Read more...</a>
+			</div>
+		</div>
+		<div class="container">
+				<h1>List User</h1>
 				<a th:href="@{/userList/adminAddUser}">Add New User</a>
 				<table class="table">
 				<thead>
@@ -70,7 +89,7 @@
 				</tbody>
 			</table>
 		</div>
-		
+		</div>
 		<div id="templatemo_footer">
 			<a href="">Home</a> | <a href="index.html">Search</a> | <a
 				href="index.html">Books</a> | <a href="#">New Releases</a> | <a
@@ -78,6 +97,5 @@
 			2024 <a href="#"><strong>Your Company Name</strong></a>
 			<!-- Credit: www.templatemo.com -->
 		</div>
-	</div>
 </body>
 </html>

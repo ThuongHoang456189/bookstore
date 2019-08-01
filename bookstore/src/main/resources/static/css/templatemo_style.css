@@ -88,7 +88,7 @@ img {
 #templatemo_container {
 	width: 960px;
 	margin: 0 auto;
-	padding: 0 10px;
+	padding: 0px;
 	background: url("../images/templatemo_bg.jpg") no-repeat;
 }
 
@@ -96,12 +96,14 @@ img {
 	width: 960px;
 	margin: 0 auto;
 	background: url("../images/templatemo_menu_bg.jpg") no-repeat;
+	color: #fff;
 }
 
 #templatemo_footer a {
 	color: #e6e154;
 	font-size: 12px;
 	text-align: center;
+	height: 100px ;
 }
 
 /* menu */
@@ -203,13 +205,13 @@ img {
 #templatemo_content {
 	clear: both;
 	width: 920px;
-	padding: 0 20px;
+	padding: 0 0px;
 }
 
 #templatemo_content #templatemo_content_left {
 	float: left;
-	width: 188px;
-	padding: 10px;
+	width: 200px;
+	padding: 0px 0px 10px 0px;
 	background-color: #171716;
 	border: 1px solid #212120;
 }
@@ -223,7 +225,7 @@ img {
 	clear: both;
 	padding-bottom: 10px;
 	border-bottom: 1px solid #2b2b2a;
-	margin-bottom: 20px;
+	margin-bottom: 0 auto;
 }
 
 .templatemo_content_left_section h1 {
@@ -340,8 +342,44 @@ img {
 	font-weight: normal;
 }
 /* end of footer */
+
+.container {
+	list-style: none;
+	clear: both;
+	padding: 0;
+	line-height: 1.5em;
+	font-family: Verdana, Arial, san-serif;
+	font-size: 14px;
+	width:960px !important;
+    margin:auto;
+	background: #1C1C1C;
+	color: red;
+}
+
+th {
+	width : 50px;
+	color : red;
+}
+
+.container .table {
+	height: 100px;
+  	width: 100%;
+}
+
 .container .row {
 	text-align: center;
+	clear: both;
+	padding: 0px 0px 0px 0px;
+	background: #1C1C1C;
+	width: 960px;
+	line-height: 1.5em;
+	font-family: Verdana, Arial, san-serif;
+	font-size: 14px;
+	margin: 0 auto;	
+}
+
+.container .regis {
+	text-align: left;
 	clear: both;
 	padding: 50px 0px 0px 0px;
 	background: #1C1C1C;
@@ -349,6 +387,61 @@ img {
 	line-height: 1.5em;
 	font-family: Verdana, Arial, san-serif;
 	font-size: 14px;
-	margin: 0 auto;
-	
+	margin: 0 auto;	
+}
+
+.container .regis h1 {
+	text-align: center;
+	font-family: Verdana, Arial, san-serif;
+	font-size: 30px;
+	color: red;
+}
+
+.container .regis .form-group {
+	font-size: 20px;
+ 	padding: 0px 0px 0px 100px;
+ 	color: red;
+}
+
+.container .regis .form-group #gg {
+	font-family: Verdana, Arial, san-serif;
+	font-size: 20px;
+	padding: 0px 0px 0px 100px;
+}
+
+.container .ss {
+	color: red;
+	text-align: center;
+	background: #1C1C1C;
+}
+
+.container .aa {
+	color: red;
+	text-align: left;
+	background: #1C1C1C;
+}
+
+.container .aa a {
+	color: #e6e154;
+	text-align: left;
+	background: #1C1C1C;
+}
+
+.container .ss .alert-info {
+	color: red;
+	text-align: center;
+	background: #1C1C1C;
+}
+.container h1{
+	color: red;
+	text-align: center;
+	width: 920px;
+	background: #1C1C1C;
+}
+
+#error h2 {
+	font-family: Verdana, Arial, san-serif;
+	font-size: 20px;
+	padding: 0px 0px 0px 100px;
+	text-align: center;
 }
