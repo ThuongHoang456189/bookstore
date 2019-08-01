@@ -12,11 +12,9 @@
 </head>
 
 <body>
-
-	<nav th:replace="indexheader :: ${header}" ></nav>
+	<nav th:replace="indexheader :: ${header}"></nav>
 	<div id="templatemo_container">
 		<div id="templatemo_content">
-		<br></br>
 			<div id="templatemo_content_left">
 				<div class="templatemo_content_left_section">
 					<h1>Categories</h1>
@@ -60,9 +58,7 @@
 						alt="Valid CSS!" vspace="8" border="0" /></a>
 				</div>
 			</div>
-			<!-- end of content left -->
-			<nav th:replace="content-right :: right"></nav>
-			<div class="cleaner_with_height">&nbsp;</div>
+			<div class="cleaner_with_height"></div>
 		</div>
 		<footer th:replace="indexheader :: ${footer}"></footer>
 		<!-- end of content -->

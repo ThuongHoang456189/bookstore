@@ -346,12 +346,12 @@ img {
 .container {
 	list-style: none;
 	clear: both;
-	padding: 0;
+	padding: 10px 0px 0px 0px;
 	line-height: 1.5em;
 	font-family: Verdana, Arial, san-serif;
 	font-size: 14px;
 	width:960px !important;
-    margin:auto;
+    margin:0 auto;
 	background: #1C1C1C;
 	color: red;
 }
