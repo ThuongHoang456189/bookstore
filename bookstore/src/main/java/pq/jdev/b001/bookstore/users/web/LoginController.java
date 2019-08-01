@@ -67,8 +67,27 @@ public class LoginController {
 	}
 
 	@GetMapping(value = "/403")
-	public String accessDeniedPage(ModelMap model) {
-		model.addAttribute("user", getPrincipal());
+	public String accessDeniedPage(Authentication authentication, ModelMap map) {
+		if (authentication != null) {
+			Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+			List<String> roles = new ArrayList<String>();
+			for (GrantedAuthority a : authorities) {
+				roles.add(a.getAuthority());
+			}
+			
+			if (isUser(roles)) {
+				map.addAttribute("header", "header_user");
+				map.addAttribute("footer", "footer_user");
+			} else 
+			if (isAdmin(roles)) {
+				map.addAttribute("header", "header_admin");
+				map.addAttribute("footer", "footer_admin");
+			} 
+		}else
+		{
+			map.addAttribute("header", "header_login");
+			map.addAttribute("footer", "footer_login");
+		}
 		return "403";
 	}
 

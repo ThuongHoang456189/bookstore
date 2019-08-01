@@ -13,7 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -52,7 +52,9 @@ public class AdminUpdateInfoController {
 	//update info
 	
 	@GetMapping
-	public String showUpdateInfoForm(Model model) {
+	public String showUpdateInfoForm(ModelMap map) {
+		map.addAttribute("header", "header_admin");
+		map.addAttribute("footer", "footer_admin");
 		return "/accountAdmin";
 	}
 
@@ -72,7 +74,9 @@ public class AdminUpdateInfoController {
 	
 	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(value = "/changePassAdmin", method = RequestMethod.GET)
-	public String showChangePassForm(Model model) {
+	public String showChangePassForm(ModelMap map) {
+		map.addAttribute("header", "header_admin");
+		map.addAttribute("footer", "footer_admin");
 		return "/changePassAdmin";
 	}
 	

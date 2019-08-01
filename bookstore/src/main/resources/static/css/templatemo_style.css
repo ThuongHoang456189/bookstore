@@ -445,3 +445,10 @@ th {
 	padding: 0px 0px 0px 100px;
 	text-align: center;
 }
+.alert-info{
+	margin: auto;
+	color: red;
+	text-align: center;
+	width: 960px;
+	background: #1C1C1C;
+}

@@ -12,7 +12,7 @@
 <title>Registration</title>
 </head>
 <body>
-	<nav th:replace="indexheader :: header" ></nav>
+	<nav th:replace="indexheader :: ${header}" ></nav>
 
 	<br>
 	<br>
@@ -149,8 +149,8 @@
 			</div>
 		</div>
 		<br>
-		<footer th:replace="indexheader :: footer"></footer>
 	</div>
+		<footer th:replace="indexheader :: ${footer}"></footer>
 
 	<script type="text/javascript"
 		th:src="@{/webjars/jquery/3.2.1/jquery.min.js/}"></script>

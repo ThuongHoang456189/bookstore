@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,8 +39,11 @@ public class PasswordResetController {
 	}
 
 	@GetMapping
-	public String displayResetPasswordPage(@RequestParam(required = false) String token, Model model) {
-
+	public String displayResetPasswordPage(@RequestParam(required = false) String token, Model model, ModelMap map) {
+		
+		map.addAttribute("header", "header_login");
+		map.addAttribute("footer", "footer_login");
+		
 		PasswordResetToken resetToken = userService.findByToken(token);
 		if (resetToken == null) {
 			model.addAttribute("error", "Could not find password reset token.");

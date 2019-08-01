@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,7 +40,9 @@ public class PasswordFogotController {
 	}
 
 	@GetMapping
-	public String displayForgotPasswordPage() {
+	public String displayForgotPasswordPage(ModelMap map) {
+		map.addAttribute("header", "header_login");
+		map.addAttribute("footer", "footer_login");
 		return "forgot-password";
 	}
 
