@@ -10,7 +10,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -18,39 +17,52 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class LoginController {
 
 	@GetMapping({ "/" })
-	public String root(Authentication authentication) {
+	public String root(Authentication authentication, ModelMap map) {
 		if (authentication != null) {
 			Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 			List<String> roles = new ArrayList<String>();
 			for (GrantedAuthority a : authorities) {
 				roles.add(a.getAuthority());
 			}
-
+			
 			if (isUser(roles)) {
-				return "/user";
-			} else if (isAdmin(roles)) {
-				return "/admin";
+				map.addAttribute("header", "header_user");
+				map.addAttribute("footer", "footer_user");
+				return "indexcontainer";
+			} else 
+			if (isAdmin(roles)) {
+				map.addAttribute("header", "header_admin");
+				map.addAttribute("footer", "footer_admin");
+				return "indexcontainer";
 			}
 		}
+		map.addAttribute("header", "header_login");
+		map.addAttribute("footer", "footer_login");
 		return "indexcontainer";
 	}
 
 	@PreAuthorize("!(hasRole('EMPLOYEE') OR hasRole('ADMIN'))")
 	@GetMapping("/login")
-	public String login(Model model) {
+	public String login(ModelMap map) {
+		map.addAttribute("header", "header_login");
+		map.addAttribute("footer", "footer_login");
 		return "login";
 	}
 
 	@PreAuthorize("hasRole('EMPLOYEE')")
 	@GetMapping("/user")
-	public String userPage(ModelMap model) {
+	public String userPage(ModelMap map) {
+		map.addAttribute("header", "header_user");
+		map.addAttribute("footer", "footer_user");
 		return "user";
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/admin")
-	public String getAdmin(ModelMap model) {
-		model.addAttribute("user", getPrincipal());
+	public String getAdmin(ModelMap map) {
+		map.addAttribute("user", getPrincipal());
+		map.addAttribute("header", "header_admin");
+		map.addAttribute("footer", "footer_admin");
 		return "admin";
 	}
 

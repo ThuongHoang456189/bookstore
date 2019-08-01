@@ -9,45 +9,10 @@
 	type="text/css" />
 </head>
 <body>
-	<!--  Free CSS Templates from www.templatemo.com -->
-	<div id="templatemo_container">
-		<div id="templatemo_menu">
-			<ul>
-				<li><a th:href="@{/admin}">Home</a></li>
-				<li><a href="#" class="current">Search</a></li>
-				<li><a href="index.html">Books</a></li>
-				<li><a href="index.html">New Releases</a></li>
-				<li><a href="#">Company</a></li>
-				<li><a href="#">Contact</a></li>
-			</ul>
-			<div class="user-admin">
-				<a th:href="@{/listUser}">List Account</a>
-				<a th:href="@{/accountAdmin}">My Account</a>
-				<a th:href="@{/logout}">Logout</a>
-			</div>
-		</div>
-		<!-- end of menu -->
-
-		<div id="templatemo_header">
-			<div id="templatemo_special_offers">
-				<p>
-					<span>25%</span> discounts for purchase over $ 40
-				</p>
-				<a href="#" style="margin-left: 50px;">Read more...</a>
-			</div>
-
-
-			<div id="templatemo_new_books">
-				<ul>
-					<li>Suspen disse</li>
-					<li>Maece nas metus</li>
-					<li>In sed risus ac feli</li>
-				</ul>
-				<a href="#" style="margin-left: 50px;">Read more...</a>
-			</div>
-		</div>
+	<nav th:replace="indexheader :: ${header}" ></nav>
 		<!-- end of header -->
 	<br></br>
+	<div id="templatemo_container">
 		<div id="templatemo_content">
 
 			<div id="templatemo_content_left">
@@ -143,13 +108,7 @@
 			<div class="cleaner_with_height">&nbsp;</div>
 		</div>
 		<!-- end of content -->
-
-		<div id="templatemo_footer">
-			<a href="">Home</a> | <a href="index.html">Search</a> | <a
-				href="index.html">Books</a> | <a href="#">New Releases</a> | <a
-				href="#">FAQs</a> | <a href="#">Contact Us</a><br /> Copyright ©
-			2024 <a href="#"><strong>Your Company Name</strong></a>
-		</div>
+		<footer th:replace="indexheader :: ${footer}"></footer>
 	</div>
 
 </body>

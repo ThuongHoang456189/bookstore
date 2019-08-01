@@ -13,7 +13,7 @@
 
 <body>
 
-	<nav th:replace="indexheader :: header" ></nav>
+	<nav th:replace="indexheader :: ${header}" ></nav>
 	<div id="templatemo_container">
 		<div id="templatemo_content">
 		<br></br>
@@ -63,8 +63,8 @@
 			<!-- end of content left -->
 			<nav th:replace="content-right :: right"></nav>
 			<div class="cleaner_with_height">&nbsp;</div>
-			<footer th:replace="indexheader :: footer"></footer>
 		</div>
+		<footer th:replace="indexheader :: ${footer}"></footer>
 		<!-- end of content -->
 	</div>
 </body>
