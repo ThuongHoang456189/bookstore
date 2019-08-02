@@ -369,6 +369,10 @@ th {
   	width: 100%;
 }
 
+.container .table a{
+	color: #FD560F;
+}
+
 .container .row {
 	text-align: center;
 	clear: both;
