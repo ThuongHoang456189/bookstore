@@ -346,6 +346,19 @@ img {
 }
 /* end of footer */
 
+.container_right {
+	list-style: none;
+	clear: both;
+	padding: 10px 0px 0px 0px;
+	line-height: 1.5em;
+	font-family: Verdana, Arial, san-serif;
+	font-size: 14px;
+	width:740px !important;
+    margin:0 auto;
+	background: #1C1C1C;
+	color: red;
+}
+
 .container {
 	list-style: none;
 	clear: both;
@@ -359,6 +372,11 @@ img {
 	color: red;
 }
 
+.search .container_right{
+	text-align : center;
+	width: 740px;
+	margin: 0 auto;
+}
 th {
 	width : 50px;
 	color : red;

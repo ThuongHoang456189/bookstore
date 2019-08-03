@@ -6,11 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import pq.jdev.b001.bookstore.Category.model.Category;
 import pq.jdev.b001.bookstore.Category.service.CategoryAddEditService;
@@ -28,14 +27,14 @@ public class CategoryListController {
 	}
 
 	@GetMapping
-	public String ListForm(Model model) {
-		
+	public String ListForm(Model model, ModelMap map) {
+		map.addAttribute("header", "header_admin");
+		map.addAttribute("footer", "footer_admin");
 		List<Category> categoryList = new ArrayList<>();
 		categoryList = categoryservice.findAll();
 		model.addAttribute("categories", categoryList);
-		
+
 		return "categoryList";
 	}
-	
-	
+
 }
