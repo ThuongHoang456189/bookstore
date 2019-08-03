@@ -76,7 +76,7 @@ public class ListBookController {
 		map.addAttribute("header", "header_admin");
 		map.addAttribute("footer", "footer_admin");
 		model.addAttribute("book", new Book());
-		return "savebook";
+		return "bookview/createform";
 	}
 
 	@GetMapping("/book/{id}/edit")
@@ -84,13 +84,13 @@ public class ListBookController {
 		map.addAttribute("header", "header_admin");
 		map.addAttribute("footer", "footer_admin");
 		model.addAttribute("book", listBookService.findOne(id));
-		return "savebook";
+		return "bookview/editform";
 	}
 
 	@PostMapping("/book/save")
 	public String save(@Valid Book book, BindingResult result, RedirectAttributes redirect) {
 		if (result.hasErrors()) {
-			return "savebook";
+			return "createform";
 		}
 		listBookService.save(book);
 		redirect.addFlashAttribute("success", "Saved book successfully!");

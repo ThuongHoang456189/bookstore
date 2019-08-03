@@ -13,7 +13,7 @@
 
 <body>
 
-	<nav th:replace="indexheader :: header"></nav>
+	<nav th:replace="indexheader :: ${header}"></nav>
 	<div id="templatemo_container">
 		<div id="templatemo_content">
 
@@ -35,7 +35,7 @@
 				<div class="templatemo_content_left_section">
 					<h1>Bestsellers</h1>
 					<ul>
-						<li><a href="publishersList">Publisher</a></li>
+						<li><a href="@{/publishersList}">Publisher</a></li>
 						<li><a href="#">Vestibulum ullamcorper</a></li>
 						<li><a href="#">Maece nas metus</a></li>
 						<li><a href="#">In sed risus ac feli</a></li>
@@ -63,19 +63,6 @@
 				</div>
 			</div>
 			<!-- end of content left -->
-<!-- 			<div class="row">
-				<a th:href="@{/employee/create}" class="btn btn-success pull-left">
-					<span class="glyphicon glyphicon-plus"></span> Add new employee
-				</a>
-				<form class="form-inline pull-right" action="#"
-					th:action="@{/employee/search}" >
-					<div class="form-group">
-						<input type="text" class="form-control" name="s"
-							placeholder="Type employee name..." />
-					</div>
-					<button type="submit" class="btn btn-primary">Search</button>
-				</form>
-			</div> -->
 			
 			<form th:action="@{/publishersList}" th:object="${category}"
 				method="get">
@@ -118,6 +105,6 @@
 		</div>
 		<!-- end of content -->
 	</div>
-	<footer th:replace="indexheader :: footer"></footer>
+	<footer th:replace="indexheader :: ${footer}"></footer>
 </body>
 </html>
