@@ -28,6 +28,14 @@
 <link th:href="@{css/templatemo_style.css}" rel="stylesheet"
 	type="text/css" />
 <link th:href="@{css/publisher.css}" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+	function myFunction(id) {
+		var txt;
+		if (confirm("ban co chac muon xoa !")) {
+			window.location = '/publisher/'+ id +'/delete/';
+		}
+	}
+</script>
 </head>
 
 <body>
@@ -114,20 +122,10 @@
 									th:href="@{/publisher/{id}/edit(id=${publisher.id})}"
 									class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
 								
-								<td><a onclick="myFunction()" class="btn btn-primary"><i
-										class="fas fa-user-times ml-2"></i></a></td>
+								<td><a th:onclick="'myFunction(' + ${publisher.id} + ');'"  class="btn btn-primary">
+								<i class="fas fa-user-times ml-2"></i></a></td>
 								<p id="demo"></p>
-								<script>
-									function myFunction() {
-										var txt;
-										if (confirm("ban co chac muon xoa !")) {
-											th:href="@{/publisher/{id}/delete(id=${publisher.id})}"
-										} else {
-											return "@{/publishersList}";
-										}
-										document.getElementById("demo").innerHTML = txt;
-									}
-								</script>
+
 						</tbody>
 					</table>
 				</div>
@@ -141,4 +139,5 @@
 	</div>
 	<footer th:replace="indexheader :: ${footer}"></footer>
 </body>
+
 </html>
