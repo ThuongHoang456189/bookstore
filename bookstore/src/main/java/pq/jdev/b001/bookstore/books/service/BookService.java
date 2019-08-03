@@ -14,8 +14,6 @@ import pq.jdev.b001.bookstore.users.model.Person;
 
 public interface BookService {
 
-	public Person findCurrentUser(User user) throws Exception;
-
 	public boolean checkInput(UploadInformationDTO dto);
 
 	public UploadInformationDTO save(UploadInformationDTO dto, Person person, List<String> categoriesId)
@@ -35,4 +33,5 @@ public interface BookService {
 	public List<Category> showAllCategories();
 
 	public List<SelectCategory> showAllCategoriesWithFlag(Book editBook);
+	
 }

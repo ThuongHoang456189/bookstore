@@ -14,7 +14,7 @@ import pq.jdev.b001.bookstore.users.web.dto.UserUpdateInfoDto;
 
 public interface UserService extends UserDetailsService {
 
-	Person findByUsername(String userName);
+	public Person findByUsername(String userName);
 
 	Person findByEmail(String email);
 	

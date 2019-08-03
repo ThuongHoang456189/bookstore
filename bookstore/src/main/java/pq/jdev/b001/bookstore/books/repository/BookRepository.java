@@ -1,7 +1,6 @@
 package pq.jdev.b001.bookstore.books.repository;
 
 import java.sql.Date;
-import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,7 +9,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import pq.jdev.b001.bookstore.Category.model.Category;
 import pq.jdev.b001.bookstore.books.model.Book;
 import pq.jdev.b001.bookstore.publisher.models.Publishers;
 import pq.jdev.b001.bookstore.users.model.Person;
@@ -24,10 +22,6 @@ public interface BookRepository extends CrudRepository<Book, Long>, JpaRepositor
 	@Modifying
 	@Query("update Book book set book.picture =:picture where book.id =:bookid")
 	public int saveUpdatePicture(@Param("bookid") Long bookid, @Param("picture") String picture);
-
-	@Modifying
-	@Query("update Book book set book.categories = :categories where book.id =:bookid")
-	public int saveUpdateCategories(@Param("bookid") Long bookid, @Param("categories") Set<Category> categories);
 
 	@Modifying
 	@Query("update Book book set book.title =:title where book.id =:bookid")

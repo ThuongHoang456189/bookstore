@@ -82,7 +82,7 @@
 						<span th:text="${success}"></span>
 					</div>
 					<div class="searchbar">
-						<a th:href="@{/book/create}" class="btn btn-success pull-left" style="font-size: 14pt;">
+						<a th:href="@{/bookview/createform}" class="btn btn-success pull-left" style="font-size: 14pt;">
 							<span class="glyphicon glyphicon-plus" ></span> Add new book
 						</a>
 						<form class="form-inline pull-right" action="#"
@@ -125,7 +125,7 @@
 											<td th:text="${contact.picture}"></td>
 											<td th:text="${contact.uploadedDate}"></td>
 											<td th:text="${contact.authors}"></td>
-											<td><a th:href="@{/book/{id}/edit(id=${contact.id})}"><span
+											<td><a th:href="@{/bookview/editform/{id}(id=${contact.id})}"><span
 													class="glyphicon glyphicon-pencil"></span>Edit</a></td>
 											<td><a th:href="@{/book/{id}/delete(id=${contact.id})}"><span
 													class="glyphicon glyphicon-trash"></span>Delete</a></td>
@@ -162,7 +162,7 @@
 											<td th:text="${contact.picture}"></td>
 											<td th:text="${contact.uploadedDate}"></td>
 											<td th:text="${contact.authors}"></td>
-											<td><a th:href="@{/book/{id}/edit(id=${contact.id})}"><span
+											<td><a th:href="@{/bookview/editform/{id}(id=${contact.id})}"><span
 													class="glyphicon glyphicon-pencil"></span>Edit</a></td>
 											<td><a th:href="@{/book/{id}/delete(id=${contact.id})}"><span
 													class="glyphicon glyphicon-trash"></span>Delete</a></td>
