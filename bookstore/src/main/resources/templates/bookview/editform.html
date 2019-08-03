@@ -276,7 +276,7 @@
 					    <div class="col-8">
 					    	<select id="publishers" name="publishers" class="btn btn-warning dropdown-toggle" th:field="${dto.publisherId}">
 					        	<option value="" disabled selected>Please select</option>
-					            <option th:each="publisher : ${dto.publishers}" th:text = "${publisher.updateName}" th:value = "${publisher.id}" th:selected="${publisher.updateName} == ${currentSelected}"></option>
+					            <option th:each="publisher : ${dto.publishers}" th:text = "${publisher.publisher}" th:value = "${publisher.id}" th:selected="${publisher.publisher} == ${currentSelected}"></option>
 					        </select>
 						</div>
 					</div>
