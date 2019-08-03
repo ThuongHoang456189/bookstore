@@ -26,7 +26,7 @@
 <body>
 
 
-	<nav th:replace="indexheader :: header"></nav>
+	<nav th:replace="indexheader :: ${header}"></nav>
 	<div id="templatemo_container">
 		<div id="templatemo_content">
 
@@ -215,7 +215,7 @@
 		</div>
 		<!-- end of content -->
 	</div>
-	<footer th:replace="indexheader :: footer"></footer>
+	<footer th:replace="indexheader :: ${footer}"></footer>
 
 </body>
 </html>

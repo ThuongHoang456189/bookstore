@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +36,9 @@ public class ListBookController {
 	}
 
 	@GetMapping("/book/page/{pageNumber}")
-	public String showBookPage(HttpServletRequest request, @PathVariable int pageNumber, Model model) {
+	public String showBookPage(HttpServletRequest request, @PathVariable int pageNumber, Model model,ModelMap map) {
+		map.addAttribute("header", "header_admin");
+		map.addAttribute("footer", "footer_admin");
 		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("booklist");
 		int pagesize = 3;
 		List<Book> list = (List<Book>) listBookService.findAll();
@@ -67,13 +70,17 @@ public class ListBookController {
 	}
 
 	@GetMapping("/book/create")
-	public String create(Model model) {
+	public String create(Model model,ModelMap map) {
+		map.addAttribute("header", "header_admin");
+		map.addAttribute("footer", "footer_admin");
 		model.addAttribute("book", new Book());
 		return "savebook";
 	}
 
 	@GetMapping("/book/{id}/edit")
-	public String edit(@PathVariable int id, Model model) {
+	public String edit(@PathVariable int id, Model model,ModelMap map) {
+		map.addAttribute("header", "header_admin");
+		map.addAttribute("footer", "footer_admin");
 		model.addAttribute("book", listBookService.findOne(id));
 		return "savebook";
 	}

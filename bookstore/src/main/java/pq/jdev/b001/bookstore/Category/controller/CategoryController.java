@@ -29,6 +29,9 @@ public class CategoryController {
 		return "categoryaddedit";
 	}
 	
+	
+	
+	
 	@PostMapping
 	public String Add(CategoryWeb categoryweb) {
 		pq.jdev.b001.bookstore.Category.model.Category category = categoryservice.save(categoryweb);

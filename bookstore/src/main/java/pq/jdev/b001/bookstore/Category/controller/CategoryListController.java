@@ -30,8 +30,7 @@ public class CategoryListController {
 	public String ListForm(Model model, ModelMap map) {
 		map.addAttribute("header", "header_admin");
 		map.addAttribute("footer", "footer_admin");
-		List<Category> categoryList = new ArrayList<>();
-		categoryList = categoryservice.findAll();
+		List<Category> categoryList = categoryservice.findAll();
 		model.addAttribute("categories", categoryList);
 
 		return "categoryList";
