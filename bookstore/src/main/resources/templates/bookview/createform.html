@@ -234,7 +234,7 @@
 		</div>
 		<!-- end of header -->
 		<div id="templatemo_content">
-			<form onsubmit="return validateForm()" id = "createform" th:action="@{/book/save}" th:object = "${dto}" method="post" enctype="multipart/form-data">
+			<form onsubmit="return validateForm()" id = "createform" th:action="@{/bookview/createform}" th:object = "${dto}" method="post" enctype="multipart/form-data">
 		        <fieldset class="scheduler-border">
 		            <legend class="scheduler-border"><center>Book Information</center></legend>
 		            <br>

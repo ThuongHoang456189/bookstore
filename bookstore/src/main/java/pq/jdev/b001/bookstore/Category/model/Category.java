@@ -1,7 +1,6 @@
 package pq.jdev.b001.bookstore.Category.model;
 
 import java.sql.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -27,14 +26,14 @@ public class Category {
 		
 	}
 	
-	public Category(long id, String name, Date createdate,Date updatedate) {
-		this.id = id;
-		this.name = name;
-		this.createdate = createdate;
-		this.updatedate = updatedate;
-	}
+//	public Category(long id, String name, Date createdate,Date updatedate) {
+//		this.id = id;
+//		this.name = name;
+//		this.createdate = createdate;
+//		this.updatedate = updatedate;
+//	}
 	
-	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "categories", targetEntity = pq.jdev.b001.bookstore.books.model.Book.class)
+	@ManyToMany(mappedBy = "categories")
 	private Set<Book> books;
 	
 	public long getId() {

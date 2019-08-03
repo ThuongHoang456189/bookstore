@@ -124,7 +124,7 @@ public class BookController {
 			Book editBook = bookService.findBookByID(idEditBook);
 			currentUser = userService.findByUsername(user.getUsername());
 			if (!bookService.checkRightInteraction(user, editBook)) {
-				return "/bookview/books";
+				return "/bookview/error";
 			}
 			model.addAttribute("currentUser", currentUser);
 			dto.setTitle(editBook.getTitle());
@@ -138,7 +138,6 @@ public class BookController {
 			model.addAttribute("id", editBook.getId());
 			model.addAttribute("dto", dto);
 			return "bookview/editform";
-
 		} catch (Exception e) {
 			return "/bookview/error";
 		}

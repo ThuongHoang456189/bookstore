@@ -271,7 +271,7 @@ public class BookServiceImpl implements BookService {
 			/** Update book.publishedYear */
 			bookRepository.saveUpdatePublishedYear(bookid, dto.getPublishedYear());
 			/** Update book.picture */
-			if (!dto.getPictureFile().isEmpty()) {
+			if (dto.getPictureFile()!=null) {
 				try {
 					MultipartFile pictureFile = dto.getPictureFile();
 					if (pictureFile != null & StringUtils.hasText(pictureFile.getOriginalFilename())) {
