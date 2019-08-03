@@ -30,6 +30,10 @@ public class CategoryAddEditServiceImpl implements CategoryAddEditService{
 	public void delete(long id) {
 		categoryrepository.deleteById(id);
 	}
+	@Override
+	public List<Category> seach(String s) {
+		return categoryrepository.search(s);
+	}
 
 
 

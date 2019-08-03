@@ -11,5 +11,6 @@ import pq.jdev.b001.bookstore.Category.web.CategoryWeb;
 public interface CategoryAddEditService {
 	Category save(CategoryWeb categoryweb);
 	List<Category> findAll();
+	List<Category> seach(String s);
 	void delete(long id);
 }
