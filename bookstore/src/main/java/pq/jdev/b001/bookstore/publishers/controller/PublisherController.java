@@ -72,7 +72,7 @@ public class PublisherController {
 		return "redirect:/publishersList";
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
+	/* @PreAuthorize("hasRole('ADMIN')") */
 	@GetMapping("/publisher/{id}/edit")
 	public String edit(@PathVariable int id, Model model, ModelMap map) {
 		map.addAttribute("header", "header_admin");
