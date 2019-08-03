@@ -101,7 +101,7 @@
 									<td th:text="${category.name}"></td>
 									<td th:text="${category.createdate}"></td>
 									<td th:text="${category.updatedate}"></td>
-									<td> <a th:href="@{/categorylist/delete/{id}(id=${category.id})}" />Delete</td>
+									<td> <a th:href="@{/categorylist/{id}/delete(id=${category.id})}" />Delete</td>
 								</tr>
 							</tbody>
 						</table>

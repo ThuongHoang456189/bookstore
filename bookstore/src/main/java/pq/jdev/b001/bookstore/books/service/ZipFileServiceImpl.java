@@ -101,6 +101,8 @@ public class ZipFileServiceImpl implements ZipFileService {
 			zos.close();
 			fis.close();
 			fos.close();
+			System.out.println(file.getCanonicalPath() + " is zipped to " + zipFileName);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

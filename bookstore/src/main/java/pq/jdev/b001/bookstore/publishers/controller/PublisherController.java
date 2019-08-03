@@ -9,18 +9,22 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import pq.jdev.b001.bookstore.publisher.models.Publishers;
+import pq.jdev.b001.bookstore.publishers.repository.PublisherRepository;
 import pq.jdev.b001.bookstore.publishers.service.PublisherService;
+import pq.jdev.b001.bookstore.publishers.service.PublisherServiceImpl;
 
 @Controller
 public class PublisherController {
@@ -49,9 +53,8 @@ public class PublisherController {
 	private PublisherService publisherService;
 
 	@GetMapping("publishersList")
-	public String viewPublishersList(Model model, ModelMap map) {
-		map.addAttribute("header", "header_admin");
-		map.addAttribute("footer", "footer_admin");
+	public String viewPublishersList(Model model) {
+
 		List<Publishers> publishers = new ArrayList<Publishers>();
 		publishers = publisherService.findall();
 		model.addAttribute("publishers", publishers);
@@ -59,38 +62,31 @@ public class PublisherController {
 	}
 
 	public String viewDetail(Model model) {
-
+		
 		return "detailPublishers";
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/publisher/{id}/delete/")
-	public String delete(@PathVariable int id, RedirectAttributes redirect, ModelMap map, Model model) {
-		map.addAttribute("header", "header_admin");
-		map.addAttribute("footer", "footer_admin");
-		publisherService.deletePublisher(id);
+	@GetMapping("/publisher/{id}/delete")
+	public String delete(@PathVariable int id, RedirectAttributes redirect) {
+		publisherService.delete(id);
 		return "redirect:/publishersList";
 	}
-
-	/* @PreAuthorize("hasRole('ADMIN')") */
+	
 	@GetMapping("/publisher/{id}/edit")
-	public String edit(@PathVariable int id, Model model, ModelMap map) {
-		map.addAttribute("header", "header_admin");
-		map.addAttribute("footer", "footer_admin");
+	public String edit(@PathVariable int id, Model model) {
 		model.addAttribute("publisher", publisherService.find(id));
 		return "detailPublishers";
-
 	}
-
+	
 	@PostMapping("/publisher/save")
 	public String save(@Valid Publishers publishers, BindingResult result, RedirectAttributes redirect) {
 		if (result.hasErrors()) {
 			return "detailPublishers";
-		}
+			}
 		publisherService.save(publishers);
 		return "redirect:/publishersList";
-	}
-
+		}
+	
 	/*
 	 * @GetMapping("/publisher/search") public String search(@RequestParam("s")
 	 * String s, Model model) { if (s.equals("")) { return
@@ -99,7 +95,7 @@ public class PublisherController {
 	 * model.addAttribute("publisher", publisherService.search(s)); return
 	 * "publishersList"; }
 	 */
-
+	
 	@GetMapping("/publishersList/page/{pageNumber}")
 	public String showPage(HttpServletRequest request,
 
