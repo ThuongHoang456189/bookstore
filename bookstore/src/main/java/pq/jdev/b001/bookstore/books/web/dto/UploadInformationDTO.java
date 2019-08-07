@@ -15,7 +15,7 @@ public class UploadInformationDTO {
 	private String title;
 
 	@Nullable
-	private Long price;
+	private long price;
 
 	@Nullable
 	private String domain;
@@ -56,12 +56,12 @@ public class UploadInformationDTO {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
-	public Long getPrice() {
+
+	public long getPrice() {
 		return price;
 	}
 
-	public void setPrice(Long price) {
+	public void setPrice(long price) {
 		this.price = price;
 	}
 

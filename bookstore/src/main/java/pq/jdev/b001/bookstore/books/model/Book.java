@@ -39,7 +39,7 @@ public class Book implements Serializable {
 	private String title;
 
 	@Column(name = "PRICE")
-	private Long price;
+	private long price;
 
 	@Column(name = "DOMAIN")
 	private String domain;
@@ -70,7 +70,7 @@ public class Book implements Serializable {
 	private Set<Upload> uploads;
 
 	@Column(name = "PUBLISHED_YEAR")
-	private Integer publishedYear;
+	private int publishedYear;
 
 	public long getId() {
 		return id;
@@ -88,11 +88,11 @@ public class Book implements Serializable {
 		this.title = title;
 	}
 
-	public Long getPrice() {
+	public long getPrice() {
 		return price;
 	}
 
-	public void setPrice(Long price) {
+	public void setPrice(long price) {
 		this.price = price;
 	}
 
@@ -160,11 +160,11 @@ public class Book implements Serializable {
 		this.uploads = uploads;
 	}
 
-	public Integer getPublishedYear() {
+	public int getPublishedYear() {
 		return publishedYear;
 	}
 
-	public void setPublishedYear(Integer publishedYear) {
+	public void setPublishedYear(int publishedYear) {
 		this.publishedYear = publishedYear;
 	}
 

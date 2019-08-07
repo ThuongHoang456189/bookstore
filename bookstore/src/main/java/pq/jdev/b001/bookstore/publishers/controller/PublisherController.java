@@ -9,7 +9,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -59,38 +58,31 @@ public class PublisherController {
 	}
 
 	public String viewDetail(Model model) {
-
+		
 		return "detailPublishers";
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/publisher/{id}/delete/")
-	public String delete(@PathVariable int id, RedirectAttributes redirect, ModelMap map, Model model) {
-		map.addAttribute("header", "header_admin");
-		map.addAttribute("footer", "footer_admin");
-		publisherService.deletePublisher(id);
+	@GetMapping("/publisher/{id}/delete")
+	public String delete(@PathVariable int id, RedirectAttributes redirect) {
+		publisherService.delete(id);
 		return "redirect:/publishersList";
 	}
-
-	/* @PreAuthorize("hasRole('ADMIN')") */
+	
 	@GetMapping("/publisher/{id}/edit")
-	public String edit(@PathVariable int id, Model model, ModelMap map) {
-		map.addAttribute("header", "header_admin");
-		map.addAttribute("footer", "footer_admin");
+	public String edit(@PathVariable int id, Model model) {
 		model.addAttribute("publisher", publisherService.find(id));
 		return "detailPublishers";
-
 	}
-
+	
 	@PostMapping("/publisher/save")
 	public String save(@Valid Publishers publishers, BindingResult result, RedirectAttributes redirect) {
 		if (result.hasErrors()) {
 			return "detailPublishers";
-		}
+			}
 		publisherService.save(publishers);
 		return "redirect:/publishersList";
-	}
-
+		}
+	
 	/*
 	 * @GetMapping("/publisher/search") public String search(@RequestParam("s")
 	 * String s, Model model) { if (s.equals("")) { return
@@ -99,7 +91,7 @@ public class PublisherController {
 	 * model.addAttribute("publisher", publisherService.search(s)); return
 	 * "publishersList"; }
 	 */
-
+	
 	@GetMapping("/publishersList/page/{pageNumber}")
 	public String showPage(HttpServletRequest request,
 

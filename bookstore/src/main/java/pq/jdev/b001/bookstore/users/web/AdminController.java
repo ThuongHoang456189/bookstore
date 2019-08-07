@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import pq.jdev.b001.bookstore.users.model.Person;
 import pq.jdev.b001.bookstore.users.model.Role;
@@ -87,11 +89,44 @@ public class AdminController {
 	}
 
 	@GetMapping
-	public String showUpdateInfoForm(Model model, ModelMap map, Principal principal) {
+	public String showUpdateInfoForm() {
+		return "redirect:/listUser/page/1";
+	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/page/{pageNumber}")
+	public String showListUser(HttpServletRequest request, @PathVariable int pageNumber, Model model, ModelMap map, Principal principal) {
 		map.addAttribute("header", "header_admin");
 		map.addAttribute("footer", "footer_admin");
-		model.addAttribute("list", getList(principal));
-		return "/listUser";
+		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("listUser");
+		int pagesize = 8;
+		List<Person> list = (List<Person>)getList(principal);
+		model.addAttribute("list", list);
+		if (pages == null) {
+			pages = new PagedListHolder<>(list);
+			pages.setPageSize(pagesize);
+		} else {
+			final int goToPage = pageNumber - 1;
+			if (goToPage <= pages.getPageCount() && goToPage >= 0) {
+				pages.setPage(goToPage);
+			}
+		}
+		
+		request.getSession().setAttribute("listUser", pages);
+		int current = pages.getPage() + 1;
+		int begin = Math.max(1, current - list.size());
+		int end = Math.min(begin + 5, pages.getPageCount());
+		int totalPageCount = pages.getPageCount();
+		String baseUrl = "/listUser/page/";
+
+		model.addAttribute("beginIndex", begin);
+		model.addAttribute("endIndex", end);
+		model.addAttribute("currentIndex", current);
+		model.addAttribute("totalPageCount", totalPageCount);
+		model.addAttribute("baseUrl", baseUrl);
+		model.addAttribute("list", pages);
+
+		return "listUser";
 	}
 
 	// update user
@@ -156,9 +191,60 @@ public class AdminController {
 		url = "redirect:/listUser/edit-user-" + String.valueOf(id) + "/changePassword?success";
 		return url;
 	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/search/{pageNumber}")
+	public String searchUser(HttpServletRequest request, @RequestParam("keyword") String kw, @PathVariable("pageNumber") int pageNumber, Model model, ModelMap map, Principal principal) {
+		map.addAttribute("header", "header_admin");
+		map.addAttribute("footer", "footer_admin");
 
+		if (kw.equals("")) {
+			return "redirect:/listUser";
+		}
+		
+		List<Person> listUserGet = (List<Person>) getList(principal);
+		List<Person> list = new ArrayList<Person>();
+		
+		for (Person a : listUserGet) {
+			if (a.getId().toString().equalsIgnoreCase(kw) || a.getUsername().equalsIgnoreCase(kw) || is(a.getFirstname(), kw) || is(a.getLastname(), kw) || is(a.getAddress(), kw))
+				list.add(a);
+		}
+		
+		for (Person a : listUserGet) {
+			if (error(a.getFirstname(), kw) || error(a.getLastname(), kw) || error(a.getAddress(), kw))
+				list.add(a);
+		}
+		
+		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("listUser");
+		int pagesize = 8;
+		
+		//if (pages == null) {
+			pages = new PagedListHolder<>(list);
+			pages.setPageSize(pagesize);
+		
+			final int goToPage = pageNumber - 1;
+			if (goToPage <= pages.getPageCount() && goToPage >= 0) {
+				pages.setPage(goToPage);
+			}
+		
+		request.getSession().setAttribute("listUser", pages);
+		int current = pages.getPage() + 1;
+		int begin = Math.max(1, current - list.size());
+		int end = Math.min(begin + 5, pages.getPageCount());
+		int totalPageCount = pages.getPageCount();
+		String baseUrl = "/listUser/page/";
+
+		model.addAttribute("beginIndex", begin);
+		model.addAttribute("endIndex", end);
+		model.addAttribute("currentIndex", current);
+		model.addAttribute("totalPageCount", totalPageCount);
+		model.addAttribute("baseUrl", baseUrl);
+		model.addAttribute("list", pages);
+
+		return "listUser";
+	}
+	
 	// delete user
-
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = { "/delete-user-{id}" })
 	public String deleteUser(@PathVariable long id, Principal principal, HttpServletRequest request,
@@ -180,5 +266,20 @@ public class AdminController {
 		}
 
 		return "redirect:/listUser";
+	}
+	
+	boolean is(String a, String b)
+	{
+		b.replace("+", " ");
+		return b.contains(a);
+	}
+	
+	boolean error(String a, String b)
+	{
+		String[] arr = b.split("\\+");
+		for (String item : arr) 
+			if (item.contains(a))
+				return true;
+		return false;
 	}
 }

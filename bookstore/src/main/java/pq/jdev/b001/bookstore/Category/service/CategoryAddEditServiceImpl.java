@@ -39,14 +39,21 @@ public class CategoryAddEditServiceImpl implements CategoryAddEditService{
 		return (List<Category>) categoryrepository.findAll();
 	}
 	@Override
+	public List<Category> findByName(String name) {
+		return (List<Category>) categoryrepository.findByName(name);
+	}
+	@Override
 	public void delete(long id) {
 		categoryrepository.deleteById(id);
 	}
+<<<<<<< HEAD
 	@Override
 	public List<Category> findByName(String name) {
 		return categoryrepository.findByName(name);
 	}
 	
+=======
+>>>>>>> bb08b965ee6f7211cf18f3d6ddf1c7567b666a8c
 
 
 

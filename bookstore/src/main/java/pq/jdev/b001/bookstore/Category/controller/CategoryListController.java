@@ -88,10 +88,10 @@ public class CategoryListController {
 		return "categoryList";
 	}
 
-	@GetMapping("/categorylist/delete/{id}")
-	public String delete(@PathVariable long id, RedirectAttributes redirect) {
+	@GetMapping("/category/{id}/delete")
+	public String delete(@PathVariable int id, RedirectAttributes redirect) {
 		categoryservice.delete(id);
-		redirect.addFlashAttribute("success", "Deleted category successfully!");
+		redirect.addFlashAttribute("success", "Deleted book successfully!");
 		return "redirect:/categorylist";
 	}
 	

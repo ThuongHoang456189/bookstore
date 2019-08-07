@@ -24,7 +24,7 @@ import pq.jdev.b001.bookstore.books.web.dto.UploadInformationDTO;
 import pq.jdev.b001.bookstore.publisher.models.Publishers;
 import pq.jdev.b001.bookstore.publishers.repository.PublisherRepository;
 import pq.jdev.b001.bookstore.users.model.Person;
-import pq.jdev.b001.bookstore.users.service.UserService;
+import pq.jdev.b001.bookstore.users.repository.UserRepository;
 import pq.jdev.b001.bookstore.Category.model.Category;
 import pq.jdev.b001.bookstore.Category.repository.CategoryRepository;
 import pq.jdev.b001.bookstore.books.model.Book;
@@ -34,9 +34,9 @@ import pq.jdev.b001.bookstore.books.model.Upload;
 @Service
 @Transactional
 public class BookServiceImpl implements BookService {
-	
+
 	@Autowired
-	private UserService userService;
+	private UserRepository userRepository;
 
 	@Autowired
 	private PublisherRepository publisherRepository;
@@ -59,6 +59,12 @@ public class BookServiceImpl implements BookService {
 	@Autowired
 	private ServletContext context;
 
+	/** Method findCurrentUser is used to get the current user information */
+	public Person findCurrentUser(User user) throws Exception {
+		Person person = userRepository.findByUsername(user.getUsername());
+		return person;
+	}
+
 	/**
 	 * Method checkInput is used to check if user didn't miss any important
 	 * information
@@ -75,7 +81,7 @@ public class BookServiceImpl implements BookService {
 		}
 		return false;
 	}
-
+	
 	/** Method save is used to insert a new book to database */
 	public UploadInformationDTO save(UploadInformationDTO dto, Person person, List<String> categoriesId)
 			throws Exception {
@@ -217,7 +223,7 @@ public class BookServiceImpl implements BookService {
 				t = new Category();
 			}
 			dbBook.setCategories(categories);
-//			bookRepository.saveUpdateCategories(dbBook.getId(), categories);
+			bookRepository.saveUpdateCategories(dbBook.getId(), categories);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -226,7 +232,7 @@ public class BookServiceImpl implements BookService {
 	}
 
 	public boolean checkRightInteraction(User user, Book book) throws Exception {
-		Person currentUser = userService.findByUsername(user.getUsername());
+		Person currentUser = findCurrentUser(user);
 		if (currentUser.getPower() == 2) {
 			return true;
 		} else if (currentUser.getPower() == 1) {
@@ -299,6 +305,7 @@ public class BookServiceImpl implements BookService {
 				/** Set upload.uploadedDate */
 				long millisUploadedDate = System.currentTimeMillis();
 				java.sql.Date dateUploadedDate = new java.sql.Date(millisUploadedDate);
+				System.out.println(dateUploadedDate);
 				upload.setUploadedDate(dateUploadedDate);
 				/** Set upload.book */
 				upload.setBook(editBook);
@@ -380,10 +387,11 @@ public class BookServiceImpl implements BookService {
 				Long categoryId = Long.parseLong(categoryStringId);
 				t = categoryRepository.getOne(categoryId);
 				categories.add(t);
+				System.out.println(t.getName());
 				t = new Category();
 			}
 			editBook.setCategories(categories);
-//			bookRepository.saveUpdateCategories(editBook.getId(), categories);
+			bookRepository.saveUpdateCategories(editBook.getId(), categories);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -398,7 +406,7 @@ public class BookServiceImpl implements BookService {
 		for (Book book : allBooks) {
 			String stringCategories = "";
 			for (Category category : book.getCategories()) {
-				stringCategories = stringCategories + category.getName() + ", ";
+				stringCategories += category;
 			}
 			temp.setCurrentBook(book);
 			books.add(temp);
@@ -427,6 +435,7 @@ public class BookServiceImpl implements BookService {
 		List<SelectCategory> selectCategories = new ArrayList<SelectCategory>();
 		SelectCategory temp = new SelectCategory();
 		for (int i = 0; i < categories.size(); i++) {
+			System.out.println(categories.get(i).getName());
 			for (Category o : editBook.getCategories()) {
 				temp.setCategory(o);
 				if (o.getId() == categories.get(i).getId()) {
