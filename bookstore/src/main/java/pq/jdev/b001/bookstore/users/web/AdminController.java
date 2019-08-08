@@ -112,6 +112,7 @@ public class AdminController {
 			Principal principal) {
 		map.addAttribute("header", "header_admin");
 		map.addAttribute("footer", "footer_admin");
+<<<<<<< HEAD
 
 		List<Person> list = (List<Person>) getList(principal);
 
@@ -121,6 +122,20 @@ public class AdminController {
 			System.out.println(list.size());
 			for (Person p : list) {
 				System.out.println(p.toString());
+=======
+		
+		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("listUsers");
+		int pagesize = 8;
+		List<Person> list = (List<Person>)getList(principal);
+		model.addAttribute("list", list);
+		if (pages == null) {
+			pages = new PagedListHolder<>(list);
+			pages.setPageSize(pagesize);
+		} else {
+			final int goToPage = pageNumber - 1;
+			if (goToPage <= pages.getPageCount() && goToPage >= 0) {
+				pages.setPage(goToPage);
+>>>>>>> cdf7e8da9659790d564926fa95cf71130e250eba
 			}
 		}
 		int pageSize = 8;
