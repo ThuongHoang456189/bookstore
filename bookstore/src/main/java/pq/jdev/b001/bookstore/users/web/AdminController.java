@@ -98,10 +98,11 @@ public class AdminController {
 	public String showListUser(HttpServletRequest request, @PathVariable int pageNumber, Model model, ModelMap map, Principal principal) {
 		map.addAttribute("header", "header_admin");
 		map.addAttribute("footer", "footer_admin");
-		List<Person> list = (List<Person>)getList(principal);
-		model.addAttribute("list", list);
+		
 		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("listUsers");
 		int pagesize = 8;
+		List<Person> list = (List<Person>)getList(principal);
+		model.addAttribute("list", list);
 		if (pages == null) {
 			pages = new PagedListHolder<>(list);
 			pages.setPageSize(pagesize);
