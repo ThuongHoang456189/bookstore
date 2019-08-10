@@ -21,6 +21,7 @@ import pq.jdev.b001.bookstore.users.repository.RoleRepository;
 import pq.jdev.b001.bookstore.users.repository.UserRepository;
 import pq.jdev.b001.bookstore.users.web.dto.AdminDto;
 import pq.jdev.b001.bookstore.users.web.dto.AdminUpdateInfoUserDto;
+import pq.jdev.b001.bookstore.users.web.dto.UserChangePassDto;
 import pq.jdev.b001.bookstore.users.web.dto.UserDto;
 import pq.jdev.b001.bookstore.users.web.dto.UserUpdateInfoDto;
 
@@ -88,12 +89,40 @@ public class UserServiceImpl implements UserService {
 		auiu.setConfirmPassword(p.getPassword());
 		auiu.setSex(p.getSex());
 		auiu.setPower(p.getPower());
+		
+		switch (p.getPower()) {
+		case 1:
+			auiu.setDropdownSelectedValue("EMPLOYEE");
+			break;
+		case 2:
+			auiu.setDropdownSelectedValue("ADMIN");;
+			break;
+		}
 		return auiu;
 	}
 	
 	@Override
 	public UserUpdateInfoDto updateInfo(Person p) {
 		UserUpdateInfoDto us = new UserUpdateInfoDto();
+		us.setId(p.getId());
+		us.setFirstName(p.getFirstname());
+		us.setLastName(p.getLastname());
+		us.setAddress(p.getAddress());
+		us.setBirthday(p.getBirthday());
+		us.setEmail(p.getEmail());
+		us.setPhone(p.getPhone());
+		us.setUserName(p.getUsername());
+		us.setPassword(p.getPassword());
+		us.setConfirmPassword(p.getPassword());
+		us.setSex(p.getSex());
+		us.setPower(p.getPower());
+		us.setRoles(p.getRoles());
+		return us;
+	}
+	
+	@Override
+	public UserChangePassDto updateInfoP(Person p) {
+		UserChangePassDto us = new UserChangePassDto();
 		us.setId(p.getId());
 		us.setFirstName(p.getFirstname());
 		us.setLastName(p.getLastname());
@@ -164,7 +193,7 @@ public class UserServiceImpl implements UserService {
 		case "ROLE_EMPLOYEE":
 			person.setPower(1);
 			break;
-		case "ROlE_ADMIN":
+		case "ROLE_ADMIN":
 			person.setPower(2);
 			break;
 		}
@@ -191,7 +220,7 @@ public class UserServiceImpl implements UserService {
 		case "ROLE_EMPLOYEE":
 			person.setPower(1);
 			break;
-		case "ROlE_ADMIN":
+		case "ROLE_ADMIN":
 			person.setPower(2);
 			break;
 		}
@@ -242,4 +271,5 @@ public class UserServiceImpl implements UserService {
 		userRepository.deleteByIdPRT(id);
 		
 	}
+
 }
