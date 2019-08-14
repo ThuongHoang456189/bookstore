@@ -93,7 +93,7 @@ public class ListBookController {
 			map.addAttribute("header", "header_login");
 			map.addAttribute("footer", "footer_login");
 		}
-		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("booklist");
+		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("bookListC");
 		int pagesize = 4;
 		List<Book> list = (List<Book>) listBookService.findAll();
 		System.out.println(list.size());
@@ -106,7 +106,7 @@ public class ListBookController {
 				pages.setPage(goToPage);
 			}
 		}
-		request.getSession().setAttribute("booklist", pages);
+		request.getSession().setAttribute("bookListC", pages);
 		int current = pages.getPage() + 1;
 		int begin = Math.max(1, current - list.size());
 		int end = Math.min(begin + 5, pages.getPageCount());
@@ -218,7 +218,7 @@ public class ListBookController {
 					list.add(a);
 		}
 
-		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("booklist");
+		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("bookListS");
 		int pagesize = 4;
 
 		pages = new PagedListHolder<>(list);
@@ -229,7 +229,7 @@ public class ListBookController {
 			pages.setPage(goToPage);
 		}
 
-		request.getSession().setAttribute("booklist", pages);
+		request.getSession().setAttribute("bookListS", pages);
 		int current = pages.getPage() + 1;
 		int begin = Math.max(1, current - list.size());
 		int end = Math.min(begin + 5, pages.getPageCount());
