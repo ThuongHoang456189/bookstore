@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 16, 2019 at 02:37 PM
+-- Generation Time: Aug 16, 2019 at 02:49 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.3
 
@@ -69,6 +69,25 @@ CREATE TABLE `book_category` (
   `book_id` bigint(20) NOT NULL,
   `category_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `book_category`
+--
+
+INSERT INTO `book_category` (`book_id`, `category_id`) VALUES
+(21, 32),
+(22, 32),
+(23, 32),
+(24, 32),
+(25, 32),
+(26, 32),
+(27, 32),
+(28, 32),
+(29, 32),
+(33, 29),
+(33, 40),
+(34, 29),
+(34, 40);
 
 -- --------------------------------------------------------
 
