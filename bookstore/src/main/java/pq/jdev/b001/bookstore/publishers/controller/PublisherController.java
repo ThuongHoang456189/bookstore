@@ -127,8 +127,23 @@ public class PublisherController {
 	public String edit(@PathVariable int id, Model model, ModelMap map) {
 		map.addAttribute("header", "header_admin");
 		map.addAttribute("footer", "footer_admin");
+		int pagesizeCP = 10;
+		PagedListHolder<?> pagePubs = null;
+		PagedListHolder<?> pageCates = null;
+		List<Publishers> listPub = (List<Publishers>) publisherService.findAll();
+		List<Category> categoryList = categoryservice.findAll();
+		if (pageCates == null) {
+			pageCates = new PagedListHolder<>(categoryList);
+			pageCates.setPageSize(pagesizeCP);
+		}
+		if (pagePubs == null) {
+			pagePubs = new PagedListHolder<>(listPub);
+			pagePubs.setPageSize(pagesizeCP);
+		}
+		model.addAttribute("publishers", pagePubs);
+		model.addAttribute("categories", pageCates);
 		model.addAttribute("publisher", publisherService.find(id));
-		return "detailPublishers";
+		return "publisherAdd";
 	}
 
 	/*
