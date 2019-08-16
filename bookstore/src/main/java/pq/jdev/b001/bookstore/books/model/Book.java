@@ -75,7 +75,8 @@ public class Book implements Serializable {
 	@Column(name = "PUBLISHED_YEAR")
 	private int publishedYear;
 
-	
+	@Column(name = "DESCRIPTION")
+	private String description;
 
 	public long getId() {
 		return id;
@@ -181,4 +182,14 @@ public class Book implements Serializable {
 		this.ok = ok;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	
+	
 }

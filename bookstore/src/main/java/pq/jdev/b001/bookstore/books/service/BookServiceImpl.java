@@ -1,12 +1,29 @@
 package pq.jdev.b001.bookstore.books.service;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -29,14 +46,14 @@ import pq.jdev.b001.bookstore.category.repository.CategoryRepository;
 import pq.jdev.b001.bookstore.publishers.model.Publishers;
 import pq.jdev.b001.bookstore.publishers.repository.PublisherRepository;
 import pq.jdev.b001.bookstore.users.model.Person;
-import pq.jdev.b001.bookstore.users.repository.UserRepository;
+import pq.jdev.b001.bookstore.users.service.UserService;
 
 @Service
 @Transactional
 public class BookServiceImpl implements BookService {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userService;
 
 	@Autowired
 	private PublisherRepository publisherRepository;
@@ -59,11 +76,7 @@ public class BookServiceImpl implements BookService {
 	@Autowired
 	private ServletContext context;
 
-	/** Method findCurrentUser is used to get the current user information */
-	public Person findCurrentUser(User user) throws Exception {
-		Person person = userRepository.findByUsername(user.getUsername());
-		return person;
-	}
+	private FileInputStream stream;
 
 	/**
 	 * Method checkInput is used to check if user didn't miss any important
@@ -81,7 +94,7 @@ public class BookServiceImpl implements BookService {
 		}
 		return false;
 	}
-	
+
 	/** Method save is used to insert a new book to database */
 	public UploadInformationDTO save(UploadInformationDTO dto, Person person, List<String> categoriesId)
 			throws Exception {
@@ -108,6 +121,8 @@ public class BookServiceImpl implements BookService {
 			book.setPublisher(dtoPublisher);
 			/** Set book.publishedYear */
 			book.setPublishedYear(dto.getPublishedYear());
+			/** Set book.description */
+			book.setDescription(dto.getDescription());
 			/** Save book to get book.id */
 			Book dbBook = bookRepository.save(book);
 			/** Upload book's cover and set book.picture */
@@ -119,6 +134,7 @@ public class BookServiceImpl implements BookService {
 						String modifiedFileName = dbBook.getId() + "_" + FilenameUtils.getBaseName(originalFileName)
 								+ "." + FilenameUtils.getExtension(originalFileName);
 						File storePictureFile = uploadPathService.getFilePath(modifiedFileName, "images/bookscover");
+						System.out.println(storePictureFile.getAbsolutePath()+".......");
 						if (storePictureFile != null) {
 							try {
 								FileUtils.writeByteArrayToFile(storePictureFile, pictureFile.getBytes());
@@ -179,9 +195,10 @@ public class BookServiceImpl implements BookService {
 						File dir = new File(sourcePath + "uploads" + File.separator + dbUpload.getId());
 						zipFileService.zipDirectory(dir, modifiedFilePath);
 						/** Delete temporary directory */
-						FileUtils.deleteDirectory(dir);
+//						FileUtils.deleteDirectory(dir);
+						dbUpload.setModifiedFileName(dbUpload.getId() + ".zip");
 					} else {
-						modifiedFilePath = sourcePath + "uploads" + File.separator + dbUpload.getId()
+						modifiedFilePath = sourcePath + "uploads" + File.separator + dbUpload.getId() + "."
 								+ FilenameUtils.getExtension(originalFileUploadName);
 						for (MultipartFile file : dto.getFiles()) {
 							String filename = file.getOriginalFilename();
@@ -198,13 +215,14 @@ public class BookServiceImpl implements BookService {
 								}
 							}
 						}
+						dbUpload.setModifiedFileName(dbUpload.getId() + "." + FilenameUtils.getExtension(originalFileUploadName));
 					}
 					/** Set upload.originalFileName */
 					dbUpload.setOriginalFileName(originalFileUploadName);
 					/** Set upload.modifiedFileName */
-					dbUpload.setModifiedFileName(dbUpload.getId() + ".zip");
+//					dbUpload.setModifiedFileName(dbUpload.getId() + ".zip");
 					/** Set upload.modifiedFilePath */
-					dbUpload.setModifiedFilePath(modifiedFilePath);
+					dbUpload.setModifiedFilePath(sourcePath + "uploads" + File.separator + dbUpload.getId());
 					/** Save upload */
 					uploadRepository.save(dbUpload);
 				} catch (Exception e) {
@@ -219,11 +237,10 @@ public class BookServiceImpl implements BookService {
 				Long categoryId = Long.parseLong(categoryStringId);
 				t = categoryRepository.getOne(categoryId);
 				categories.add(t);
-				System.out.println(t.getName());
 				t = new Category();
 			}
 			dbBook.setCategories(categories);
-			bookRepository.saveUpdateCategories(dbBook.getId(), categories);
+//			bookRepository.saveUpdateCategories(dbBook.getId(), categories);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -232,7 +249,7 @@ public class BookServiceImpl implements BookService {
 	}
 
 	public boolean checkRightInteraction(User user, Book book) throws Exception {
-		Person currentUser = findCurrentUser(user);
+		Person currentUser = userService.findByUsername(user.getUsername());
 		if (currentUser.getPower() == 2) {
 			return true;
 		} else if (currentUser.getPower() == 1) {
@@ -276,8 +293,10 @@ public class BookServiceImpl implements BookService {
 			bookRepository.saveUpdatePublisher(bookid, dtoPublisher);
 			/** Update book.publishedYear */
 			bookRepository.saveUpdatePublishedYear(bookid, dto.getPublishedYear());
+			/** Update book.description */
+			bookRepository.saveUpdateDescription(bookid, dto.getDescription());
 			/** Update book.picture */
-			if (!dto.getPictureFile().isEmpty()) {
+			if (dto.getPictureFile() != null) {
 				try {
 					MultipartFile pictureFile = dto.getPictureFile();
 					if (pictureFile != null & StringUtils.hasText(pictureFile.getOriginalFilename())) {
@@ -305,7 +324,6 @@ public class BookServiceImpl implements BookService {
 				/** Set upload.uploadedDate */
 				long millisUploadedDate = System.currentTimeMillis();
 				java.sql.Date dateUploadedDate = new java.sql.Date(millisUploadedDate);
-				System.out.println(dateUploadedDate);
 				upload.setUploadedDate(dateUploadedDate);
 				/** Set upload.book */
 				upload.setBook(editBook);
@@ -346,7 +364,7 @@ public class BookServiceImpl implements BookService {
 							File dir = new File(sourcePath + "uploads" + File.separator + dbUpload.getId());
 							zipFileService.zipDirectory(dir, modifiedFilePath);
 							/** Delete temporary directory */
-							FileUtils.deleteDirectory(dir);
+//							FileUtils.deleteDirectory(dir);
 						} else {
 							modifiedFilePath = sourcePath + "uploads" + File.separator + dbUpload.getId()
 									+ FilenameUtils.getExtension(originalFileUploadName);
@@ -371,7 +389,7 @@ public class BookServiceImpl implements BookService {
 						/** Set upload.modifiedFileName */
 						dbUpload.setModifiedFileName(dbUpload.getId() + ".zip");
 						/** Set upload.modifiedFilePath */
-						dbUpload.setModifiedFilePath(modifiedFilePath);
+						dbUpload.setModifiedFilePath(sourcePath + "uploads" + File.separator + dbUpload.getId());
 						/** Save upload */
 						uploadRepository.save(dbUpload);
 					} catch (Exception e) {
@@ -387,11 +405,10 @@ public class BookServiceImpl implements BookService {
 				Long categoryId = Long.parseLong(categoryStringId);
 				t = categoryRepository.getOne(categoryId);
 				categories.add(t);
-				System.out.println(t.getName());
 				t = new Category();
 			}
 			editBook.setCategories(categories);
-			bookRepository.saveUpdateCategories(editBook.getId(), categories);
+//			bookRepository.saveUpdateCategories(editBook.getId(), categories);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -406,7 +423,7 @@ public class BookServiceImpl implements BookService {
 		for (Book book : allBooks) {
 			String stringCategories = "";
 			for (Category category : book.getCategories()) {
-				stringCategories += category;
+				stringCategories = stringCategories + category.getName() + ", ";
 			}
 			temp.setCurrentBook(book);
 			books.add(temp);
@@ -435,7 +452,6 @@ public class BookServiceImpl implements BookService {
 		List<SelectCategory> selectCategories = new ArrayList<SelectCategory>();
 		SelectCategory temp = new SelectCategory();
 		for (int i = 0; i < categories.size(); i++) {
-			System.out.println(categories.get(i).getName());
 			for (Category o : editBook.getCategories()) {
 				temp.setCategory(o);
 				if (o.getId() == categories.get(i).getId()) {
@@ -447,4 +463,164 @@ public class BookServiceImpl implements BookService {
 		}
 		return selectCategories;
 	}
+	
+	public List<Date> listUploadedDateofBook(String id, String picture){
+		Long idBook = Long.parseLong(id);
+		List<Upload> uploads = uploadRepository.findUploadByIdBook(idBook);
+		List<Date> uploadedDates = new ArrayList<Date>();
+		for(Upload u : uploads)
+		{
+			uploadedDates.add(u.getUploadedDate());
+		}
+		Book bookFound = bookRepository.getOne(idBook);
+		picture = context.getRealPath("images/bookscover/"+bookFound.getPicture());
+		return uploadedDates;
+	}
+
+	public void downloadZipFiles(String bookid, Date uploadedDate, HttpServletResponse response) {
+		try {
+			Long idBook = Long.parseLong(bookid);
+			System.out.println("aaaa");
+//				Date date = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(uploadedDate);
+			System.out.println("bbbb");
+			Upload uploadFound = uploadRepository.findUploadByIdBookandUploadedDate(idBook, uploadedDate);
+			System.out.println("cccc");
+			File fileFound = new File(uploadFound.getModifiedFilePath());
+			System.out.println("dddd");
+			if(uploadFound.getModifiedFilePath()!=null && fileFound.exists() &&uploadFound.getModifiedFileName().contains(".zip"))
+			{
+			System.out.println("AAAA");
+			response.setContentType("zip");
+			response.setHeader("Content-Disposition", "attachment"+ 
+			                                    "filename=" + uploadFound.getModifiedFileName());
+//			           System.out.println("CCCC");
+			        byte[] buffer = new byte[122048];
+//			        System.out.println(".....");
+			        ZipInputStream zis = new ZipInputStream(new FileInputStream(uploadFound.getModifiedFilePath()));
+//			        System.out.println("Thup");
+			        ZipEntry zipEntry = zis.getNextEntry();
+//			        System.out.println("Normal");
+			        File destDir = new File(context.getRealPath("uploads/temp"));
+			        System.out.println(destDir);
+			        while (zipEntry != null) {
+//			        	System.out.println("Looo");
+			        	ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//			   			System.out.println("Kjo");
+			            ZipOutputStream zos = new ZipOutputStream(baos);
+			            File newFile = newFile(destDir, zipEntry);
+			            FileOutputStream fos = new FileOutputStream(newFile);
+			            int len;
+			            while ((len = zis.read(buffer)) > 0) {
+			                fos.write(buffer, 0, len);
+			            }
+			            fos.close();
+			            zipEntry = zis.getNextEntry();
+//			            System.out.println("Dherf");
+//			            System.out.println("Edf");
+//			            System.out.println("dfja");
+//			            while ((len = zis.read(buffer)) != -1) {
+////			            	System.out.println("djfsja");
+//			            	System.out.println("hdfhash");
+//			            	zos.write(buffer, 0, len);
+////			                System.out.println("I n");
+//			            	System.out.println("Hejdjsj");
+//			            }
+//			            zipEntry = zis.getNextEntry();
+//			            System.out.println("Hej");
+			        }
+//			        System.out.println("ndfsd");
+//			        zis.closeEntry();
+//			        zis.close();
+////			        stream = new FileInputStream(new File(uploadFound.getModifiedFilePath()));
+////		            System.out.println(uploadFound.getModifiedFilePath());
+////		            System.out.println("DDDD");
+//		            response.setContentLength(stream.available());
+////		            System.out.println("EEEE");
+//		            OutputStream os = response.getOutputStream();
+////		            System.out.println("FFFF");
+//		            os.close();
+////		            System.out.println("GGGG");
+//		            response.flushBuffer();
+//		            System.out.println("HHHH");
+			}
+			} catch (Exception e) {
+			System.out.println("Hello, I'm a bug");
+			}finally {
+			       if (stream != null) {
+			           try {
+			               stream.close();
+			           } catch (IOException e) {
+			               e.printStackTrace();
+			               System.out.println("Stream fail");
+			           }
+			       }
+			   }
+
+
+	}
+//	
+//	private File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
+//        File destFile = new File(destinationDir, zipEntry.getName());
+//         
+//        String destDirPath = destinationDir.getCanonicalPath();
+//        String destFilePath = destFile.getCanonicalPath();
+//         
+//        if (!destFilePath.startsWith(destDirPath + File.separator)) {
+//            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
+//        }
+//         
+//        return destFile;
+//    }
+	
+	public void downloadFile(String id, Date uploadedDate, HttpServletResponse response) {
+		try 
+		{
+			Long idBook = Long.parseLong(id);
+			Upload uploadFound = uploadRepository.findUploadByIdBookandUploadedDate(idBook, uploadedDate);
+			File fileFound = new File(uploadFound.getModifiedFilePath());
+			if(uploadFound.getModifiedFilePath()!=null && fileFound.exists() && uploadFound.getModifiedFileName().contains(".zip"))
+			{
+				  byte[] buffer = new byte[122048];
+
+				response.setContentType("application/zip");
+		        response.setHeader("Content-Disposition", "attachment; filename="+uploadFound.getBook().getTitle()+".zip");
+		        ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
+		        // i dont have idea on what to give here in fileoutputstream
+		        FileOutputStream fos = new FileOutputStream(new File(uploadFound.getModifiedFilePath()).getAbsoluteFile());
+		        File contentFile = new File(context.getRealPath("uploads/temp"));
+		        ZipEntry ze= new ZipEntry(contentFile.toString());
+		        zos.putNextEntry(ze);
+		        FileInputStream in = new FileInputStream(contentFile.toString());
+
+		        int len;
+		        while ((len = in.read(buffer)) > 0) {
+		            zos.write(buffer, 0, len);
+		        }
+
+		        in.close();
+		        zos.closeEntry();
+
+		        //remember close it
+		        zos.close();
+
+		        System.out.println("Done");
+		    }
+		}catch (Exception e) {
+			System.out.println("I don't want to see a bug");
+			System.out.println("+++++++"+e.getMessage());
+		}
+	}
+	public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
+		        File destFile = new File(destinationDir, zipEntry.getName());
+		         
+		        String destDirPath = destinationDir.getCanonicalPath();
+		        String destFilePath = destFile.getCanonicalPath();
+		         
+		        if (!destFilePath.startsWith(destDirPath + File.separator)) {
+		            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
+		        }
+		         
+		        return destFile;
+			}
+	
 }

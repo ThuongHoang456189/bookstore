@@ -1,20 +1,21 @@
 package pq.jdev.b001.bookstore.books.service;
 
+import java.sql.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.userdetails.User;
 
-import pq.jdev.b001.bookstore.category.model.Category;
 import pq.jdev.b001.bookstore.books.model.Book;
 import pq.jdev.b001.bookstore.books.model.SelectCategory;
 import pq.jdev.b001.bookstore.books.web.dto.BookDTO;
 import pq.jdev.b001.bookstore.books.web.dto.UploadInformationDTO;
+import pq.jdev.b001.bookstore.category.model.Category;
 import pq.jdev.b001.bookstore.publishers.model.Publishers;
 import pq.jdev.b001.bookstore.users.model.Person;
 
 public interface BookService {
-
-	public Person findCurrentUser(User user) throws Exception;
 
 	public boolean checkInput(UploadInformationDTO dto);
 
@@ -35,4 +36,10 @@ public interface BookService {
 	public List<Category> showAllCategories();
 
 	public List<SelectCategory> showAllCategoriesWithFlag(Book editBook);
+	
+	public void downloadZipFiles(String id, Date uploadedDate, HttpServletResponse response);
+	
+	public List<Date> listUploadedDateofBook(String id, String picture);
+	
+	public void downloadFile(String id, Date uploadedDate, HttpServletResponse response);
 }
