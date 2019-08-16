@@ -89,15 +89,15 @@ legend.scheduler-border
 		<!-- end of header -->
 
 <div id="templatemo_content">
- <form th:action="@{/bookview/success}" method="get">
+ <form th:action="@{/}" method="get">
     <div id="thankful">
         <p><center><b><font size="4">Your work has successfully done. We highly appreciate your kindness</font></b></center></p> 
     </div>
-    <center><button class="btn btn-success" th:action="@{/}" type="button">Home <i class="fa fa-home"></i></button></center>
+    <center><button class="btn btn-success" th:action="@{/}" type="submit">Home <i class="fa fa-home"></i></button></center>
  </form>
  <br>
  <form method="post" sec:authorize="hasAnyRole('ADMIN', 'EMPLOYEE')" th:action="@{/book}">
-    <center><button class="btn btn-success" th:action="@{/book}"  type="button">View your work</button></center> 
+    <center><button class="btn btn-success" th:action="@{/book}"  type="submit">View your work</button></center> 
  </form>
  </div>
  <div id="templatemo_footer">

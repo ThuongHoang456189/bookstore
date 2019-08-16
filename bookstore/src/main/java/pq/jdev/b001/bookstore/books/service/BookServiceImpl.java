@@ -195,7 +195,7 @@ public class BookServiceImpl implements BookService {
 						File dir = new File(sourcePath + "uploads" + File.separator + dbUpload.getId());
 						zipFileService.zipDirectory(dir, modifiedFilePath);
 						/** Delete temporary directory */
-//						FileUtils.deleteDirectory(dir);
+						FileUtils.deleteDirectory(dir);
 						dbUpload.setModifiedFileName(dbUpload.getId() + ".zip");
 					} else {
 						modifiedFilePath = sourcePath + "uploads" + File.separator + dbUpload.getId() + "."
@@ -220,7 +220,7 @@ public class BookServiceImpl implements BookService {
 					/** Set upload.originalFileName */
 					dbUpload.setOriginalFileName(originalFileUploadName);
 					/** Set upload.modifiedFileName */
-//					dbUpload.setModifiedFileName(dbUpload.getId() + ".zip");
+					dbUpload.setModifiedFileName(dbUpload.getId() + ".zip");
 					/** Set upload.modifiedFilePath */
 					dbUpload.setModifiedFilePath(sourcePath + "uploads" + File.separator + dbUpload.getId());
 					/** Save upload */
@@ -364,7 +364,7 @@ public class BookServiceImpl implements BookService {
 							File dir = new File(sourcePath + "uploads" + File.separator + dbUpload.getId());
 							zipFileService.zipDirectory(dir, modifiedFilePath);
 							/** Delete temporary directory */
-//							FileUtils.deleteDirectory(dir);
+							FileUtils.deleteDirectory(dir);
 						} else {
 							modifiedFilePath = sourcePath + "uploads" + File.separator + dbUpload.getId()
 									+ FilenameUtils.getExtension(originalFileUploadName);
