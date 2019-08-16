@@ -133,7 +133,7 @@ public class BookServiceImpl implements BookService {
 						String originalFileName = pictureFile.getOriginalFilename();
 						String modifiedFileName = dbBook.getId() + "_" + FilenameUtils.getBaseName(originalFileName)
 								+ "." + FilenameUtils.getExtension(originalFileName);
-						File storePictureFile = uploadPathService.getFilePath(modifiedFileName, "images/bookscover");
+						File storePictureFile = uploadPathService.getFilePath(modifiedFileName, "img/bookscover");
 						System.out.println(storePictureFile.getAbsolutePath()+".......");
 						if (storePictureFile != null) {
 							try {
@@ -303,7 +303,7 @@ public class BookServiceImpl implements BookService {
 						String originalFileName = pictureFile.getOriginalFilename();
 						String modifiedFileName = bookid + "_" + FilenameUtils.getBaseName(originalFileName) + "."
 								+ FilenameUtils.getExtension(originalFileName);
-						File storePictureFile = uploadPathService.getFilePath(modifiedFileName, "images/bookscover");
+						File storePictureFile = uploadPathService.getFilePath(modifiedFileName, "img/bookscover");
 						if (storePictureFile != null) {
 							try {
 								FileUtils.writeByteArrayToFile(storePictureFile, pictureFile.getBytes());

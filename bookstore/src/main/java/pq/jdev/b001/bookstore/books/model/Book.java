@@ -40,7 +40,7 @@ public class Book implements Serializable {
 
 	@Column(name = "PRICE")
 	private long price;
-	
+
 	@Column(name = "OK")
 	private int ok;
 
@@ -190,6 +190,4 @@ public class Book implements Serializable {
 		this.description = description;
 	}
 
-	
-	
 }

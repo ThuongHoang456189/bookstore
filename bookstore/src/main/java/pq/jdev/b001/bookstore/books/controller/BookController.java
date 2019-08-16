@@ -131,7 +131,7 @@ public class BookController {
 				return "/bookview/error";
 			}
 			model.addAttribute("currentUser", currentUser);
-			//Can be separate as a method in Service
+			// Can be separate as a method in Service
 			dto.setTitle(editBook.getTitle());
 			dto.setPrice(editBook.getPrice());
 			dto.setDomain(editBook.getDomain());
@@ -171,10 +171,9 @@ public class BookController {
 			return "bookview/error";
 		}
 	}
-	
+
 	@GetMapping("/bookview/infor/{id}")
-	public String showBookDetails(UploadInformationDTO dto,
-			@PathVariable("id") String id, Model model) {
+	public String showBookDetails(UploadInformationDTO dto, @PathVariable("id") String id, Model model) {
 		Long idCurrent = Long.parseLong(id);
 		Book currentBook = bookService.findBookByID(idCurrent);
 		dto.setTitle(currentBook.getTitle());
@@ -195,19 +194,16 @@ public class BookController {
 		List<Date> uploadedDates = bookService.listUploadedDateofBook(id, picture);
 		System.out.println("*************" + picture);
 		picture = currentBook.getPicture();
-		if(!picture.equals(""))
-		{
-			model.addAttribute("picture", picture);
-
-		}
+		model.addAttribute("book", currentBook);
 		model.addAttribute("uploadedDates", uploadedDates);
 		model.addAttribute("dto", dto);
 		model.addAttribute("id", id);
 		return "bookview/infor";
 	}
-	
+
 	@GetMapping("/bookview/download/{id}")
-	public void downloadFilesAsZip(@PathVariable("id") String id, @RequestParam("uploadedDate") Date uploadedDate, Model model, HttpServletResponse response) {
+	public void downloadFilesAsZip(@PathVariable("id") String id, @RequestParam("uploadedDate") Date uploadedDate,
+			Model model, HttpServletResponse response) {
 		System.out.println(uploadedDate);
 		bookService.downloadFile(id, uploadedDate, response);
 	}
