@@ -1,9 +1,6 @@
 package pq.jdev.b001.bookstore.books.service;
 
-import java.sql.Date;
 import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.userdetails.User;
 
@@ -36,10 +33,5 @@ public interface BookService {
 	public List<Category> showAllCategories();
 
 	public List<SelectCategory> showAllCategoriesWithFlag(Book editBook);
-	
-	public void downloadZipFiles(String id, Date uploadedDate, HttpServletResponse response);
-	
-	public List<Date> listUploadedDateofBook(String id, String picture);
-	
-	public void downloadFile(String id, Date uploadedDate, HttpServletResponse response);
+
 }

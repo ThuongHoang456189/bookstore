@@ -1,9 +1,6 @@
 package pq.jdev.b001.bookstore.books.controller;
 
-import java.sql.Date;
 import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,49 +36,16 @@ public class BookController {
 		return new UploadInformationDTO();
 	}
 
-	@PostMapping("/bookview")
+	@GetMapping("/bookview")
 	public String loadGuestView(Model model) {
 		model.addAttribute("books", bookService.viewAllBooks());
-		return "/bookview/books";
+		return "/book/page/1";
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE')")
-	@GetMapping("/bookview")
-	public String loadUserView(@AuthenticationPrincipal User user, Model model) throws Exception {
-		String role = "guest";
-		Person currentUser = userService.findByUsername(user.getUsername());
-		if (currentUser.getPower() == 2) {
-			role = "admin";
-		} else if (currentUser.getPower() == 1) {
-			role = "employee";
-		}
-		model.addAttribute("currentUser", currentUser);
-		model.addAttribute("role", role);
-		model.addAttribute("books", bookService.viewAllBooks());
-		return "/bookview/information";
-	}
-
-	@PostMapping("/bookview/books")
+	@GetMapping("/bookview/books")
 	public String loadInformationGuestView(Model model) {
 		model.addAttribute("books", bookService.viewAllBooks());
-		return "bookview/books";
-	}
-
-	@PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE')")
-	@GetMapping("/bookview/information")
-	public String loadInformationUserView(@AuthenticationPrincipal User user, Model model,
-			RedirectAttributes redirectAttributes) throws Exception {
-		String role = "guest";
-		Person currentUser = userService.findByUsername(user.getUsername());
-		if (currentUser.getPower() == 2) {
-			role = "admin";
-		} else if (currentUser.getPower() == 1) {
-			role = "employee";
-		}
-		model.addAttribute("currentUser", currentUser);
-		model.addAttribute("role", role);
-		model.addAttribute("books", bookService.viewAllBooks());
-		return "bookview/information";
+		return "book/page/1";
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE')")
@@ -131,7 +95,6 @@ public class BookController {
 				return "/bookview/error";
 			}
 			model.addAttribute("currentUser", currentUser);
-			// Can be separate as a method in Service
 			dto.setTitle(editBook.getTitle());
 			dto.setPrice(editBook.getPrice());
 			dto.setDomain(editBook.getDomain());
@@ -142,7 +105,6 @@ public class BookController {
 			dto.setPublishedYear(editBook.getPublishedYear());
 			dto.setSelectCategories(bookService.showAllCategoriesWithFlag(editBook));
 			dto.setDescription(editBook.getDescription());
-			//
 			model.addAttribute("id", editBook.getId());
 			model.addAttribute("dto", dto);
 			return "bookview/editform";
@@ -174,37 +136,30 @@ public class BookController {
 
 	@GetMapping("/bookview/infor/{id}")
 	public String showBookDetails(UploadInformationDTO dto, @PathVariable("id") String id, Model model) {
-		Long idCurrent = Long.parseLong(id);
-		Book currentBook = bookService.findBookByID(idCurrent);
-		dto.setTitle(currentBook.getTitle());
-		dto.setPrice(currentBook.getPrice());
-		dto.setDomain(currentBook.getDomain());
-		dto.setAuthors(currentBook.getAuthors());
-		String publisher = currentBook.getPublisher().getPublisher();
-		model.addAttribute("publisher", publisher);
-		dto.setPublishedYear(currentBook.getPublishedYear());
-		dto.setUploadedDate(currentBook.getUploadedDate());
-		String stringCategories = "";
-		for (Category category : currentBook.getCategories()) {
-			stringCategories = stringCategories + category.getName() + ", ";
+		try {
+			Long idCurrent = Long.parseLong(id);
+			Book currentBook = bookService.findBookByID(idCurrent);
+			dto.setTitle(currentBook.getTitle());
+			dto.setPrice(currentBook.getPrice());
+			dto.setDomain(currentBook.getDomain());
+			dto.setAuthors(currentBook.getAuthors());
+			String publisher = currentBook.getPublisher().getPublisher();
+			dto.setPublishedYear(currentBook.getPublishedYear());
+			dto.setUploadedDate(currentBook.getUploadedDate());
+			String stringCategories = "";
+			for (Category category : currentBook.getCategories()) {
+				stringCategories = stringCategories + category.getName() + ", ";
+			}
+			model.addAttribute("stringCategories", stringCategories);
+			dto.setDescription(currentBook.getDescription());
+			model.addAttribute("publisher", publisher);
+			model.addAttribute("book", currentBook);
+			model.addAttribute("dto", dto);
+			model.addAttribute("id", id);
+			return "bookview/infor";
+		} catch (Exception e) {
+			return "bookview/error";
 		}
-		model.addAttribute("stringCategories", stringCategories);
-		dto.setDescription(currentBook.getDescription());
-		String picture = "";
-		List<Date> uploadedDates = bookService.listUploadedDateofBook(id, picture);
-		System.out.println("*************" + picture);
-		picture = currentBook.getPicture();
-		model.addAttribute("book", currentBook);
-		model.addAttribute("uploadedDates", uploadedDates);
-		model.addAttribute("dto", dto);
-		model.addAttribute("id", id);
-		return "bookview/infor";
-	}
 
-	@GetMapping("/bookview/download/{id}")
-	public void downloadFilesAsZip(@PathVariable("id") String id, @RequestParam("uploadedDate") Date uploadedDate,
-			Model model, HttpServletResponse response) {
-		System.out.println(uploadedDate);
-		bookService.downloadFile(id, uploadedDate, response);
 	}
 }
