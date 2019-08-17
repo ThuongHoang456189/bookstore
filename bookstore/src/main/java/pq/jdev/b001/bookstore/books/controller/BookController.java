@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,6 +25,9 @@ import pq.jdev.b001.bookstore.books.model.Book;
 import pq.jdev.b001.bookstore.books.service.BookService;
 import pq.jdev.b001.bookstore.books.web.dto.UploadInformationDTO;
 import pq.jdev.b001.bookstore.category.model.Category;
+import pq.jdev.b001.bookstore.category.service.CategoryService;
+import pq.jdev.b001.bookstore.publishers.model.Publishers;
+import pq.jdev.b001.bookstore.publishers.service.PublisherService;
 import pq.jdev.b001.bookstore.users.model.Person;
 import pq.jdev.b001.bookstore.users.service.UserService;
 
@@ -35,6 +39,12 @@ public class BookController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private PublisherService publisherService;
+
+	@Autowired
+	private CategoryService categoryservice;
 
 	@ModelAttribute("dto")
 	public UploadInformationDTO dTO() {
@@ -342,6 +352,24 @@ public class BookController {
 				map.addAttribute("header", "header_login");
 				map.addAttribute("footer", "footer_login");
 			}
+			
+			int pagesizeCP = 10;
+			PagedListHolder<?> pagePubs = null;
+			PagedListHolder<?> pageCates = null;
+			List<Publishers> listPub = (List<Publishers>) publisherService.findAll();
+			List<Category> categoryList = categoryservice.findAll();
+			if (pageCates == null) {
+				pageCates = new PagedListHolder<>(categoryList);
+				pageCates.setPageSize(pagesizeCP);
+			}
+			if (pagePubs == null) {
+				pagePubs = new PagedListHolder<>(listPub);
+				pagePubs.setPageSize(pagesizeCP);
+			} 
+			model.addAttribute("publishers", pagePubs);
+			model.addAttribute("categories", pageCates);
+			model.addAttribute("book", new Book());
+			
 			Long idCurrent = Long.parseLong(id);
 			Book currentBook = bookService.findBookByID(idCurrent);
 			dto.setTitle(currentBook.getTitle());
