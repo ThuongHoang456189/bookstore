@@ -19,7 +19,7 @@ import pq.jdev.b001.bookstore.category.web.CategoryWeb;
  * */
 
 @Service
-public interface CategoryAddEditService {
+public interface CategoryService {
 	Category save(CategoryWeb categoryweb);
 	List<Category> findAll();
 	List<Category> findByName(String name);
