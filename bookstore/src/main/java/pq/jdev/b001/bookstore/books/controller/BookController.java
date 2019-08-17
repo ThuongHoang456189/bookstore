@@ -1,13 +1,18 @@
 package pq.jdev.b001.bookstore.books.controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,7 +56,7 @@ public class BookController {
 	@PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE')")
 	@GetMapping("/bookview/createform")
 	public String initializeCreating(@AuthenticationPrincipal User user, UploadInformationDTO dto, Model model,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes, Authentication authentication, ModelMap map) {
 		try {
 			Person currentUser = new Person();
 			currentUser = userService.findByUsername(user.getUsername());
@@ -61,6 +66,24 @@ public class BookController {
 			model.addAttribute("currentUser", currentUser);
 			return "bookview/createform";
 		} catch (Exception e) {
+			if (authentication != null) {
+				Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+				List<String> roles = new ArrayList<String>();
+				for (GrantedAuthority a : authorities) {
+					roles.add(a.getAuthority());
+				}
+				
+				if (isUser(roles)) {
+					map.addAttribute("header", "header_user");
+					map.addAttribute("footer", "footer_user");
+				} else if (isAdmin(roles)) {
+					map.addAttribute("header", "header_admin");
+					map.addAttribute("footer", "footer_admin");
+				}
+			} else {
+				map.addAttribute("header", "header_login");
+				map.addAttribute("footer", "footer_login");
+			}
 			return "bookview/error";
 		}
 	}
@@ -68,7 +91,7 @@ public class BookController {
 	@PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE')")
 	@PostMapping("/bookview/createform")
 	public String createBook(@AuthenticationPrincipal User user, UploadInformationDTO dto,
-			@RequestParam(value = "idChecked", required = false) List<String> categoriesId, Model model) {
+			@RequestParam(value = "idChecked", required = false) List<String> categoriesId, Model model, ModelMap map, Authentication authentication) {
 		try {
 			Person currentUser = userService.findByUsername(user.getUsername());
 			if (!bookService.checkInput(dto)) {
@@ -77,6 +100,24 @@ public class BookController {
 			bookService.save(dto, currentUser, categoriesId);
 			return "bookview/success";
 		} catch (Exception e) {
+			if (authentication != null) {
+				Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+				List<String> roles = new ArrayList<String>();
+				for (GrantedAuthority a : authorities) {
+					roles.add(a.getAuthority());
+				}
+				
+				if (isUser(roles)) {
+					map.addAttribute("header", "header_user");
+					map.addAttribute("footer", "footer_user");
+				} else if (isAdmin(roles)) {
+					map.addAttribute("header", "header_admin");
+					map.addAttribute("footer", "footer_admin");
+				}
+			} else {
+				map.addAttribute("header", "header_login");
+				map.addAttribute("footer", "footer_login");
+			}
 			return "bookview/error";
 		}
 	}
@@ -84,7 +125,27 @@ public class BookController {
 	@PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE')")
 	@GetMapping("/bookview/editform/{id}")
 	public String initializeEditing(@AuthenticationPrincipal User user, UploadInformationDTO dto,
-			@PathVariable("id") String id, Model model) {
+			@PathVariable("id") String id, Model model, Authentication authentication, ModelMap map) {
+
+		if (authentication != null) {
+			Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+			List<String> roles = new ArrayList<String>();
+			for (GrantedAuthority a : authorities) {
+				roles.add(a.getAuthority());
+			}
+
+			if (isUser(roles)) {
+				map.addAttribute("header", "header_user");
+				map.addAttribute("footer", "footer_user");
+			} else if (isAdmin(roles)) {
+				map.addAttribute("header", "header_admin");
+				map.addAttribute("footer", "footer_admin");
+			}
+		} else {
+			map.addAttribute("header", "header_login");
+			map.addAttribute("footer", "footer_login");
+		}
+
 		try {
 			dto = new UploadInformationDTO();
 			Person currentUser = new Person();
@@ -92,6 +153,24 @@ public class BookController {
 			Book editBook = bookService.findBookByID(idEditBook);
 			currentUser = userService.findByUsername(user.getUsername());
 			if (!bookService.checkRightInteraction(user, editBook)) {
+				if (authentication != null) {
+					Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+					List<String> roles = new ArrayList<String>();
+					for (GrantedAuthority a : authorities) {
+						roles.add(a.getAuthority());
+					}
+
+					if (isUser(roles)) {
+						map.addAttribute("header", "header_user");
+						map.addAttribute("footer", "footer_user");
+					} else if (isAdmin(roles)) {
+						map.addAttribute("header", "header_admin");
+						map.addAttribute("footer", "footer_admin");
+					}
+				} else {
+					map.addAttribute("header", "header_login");
+					map.addAttribute("footer", "footer_login");
+				}
 				return "/bookview/error";
 			}
 			model.addAttribute("currentUser", currentUser);
@@ -109,6 +188,24 @@ public class BookController {
 			model.addAttribute("dto", dto);
 			return "bookview/editform";
 		} catch (Exception e) {
+			if (authentication != null) {
+				Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+				List<String> roles = new ArrayList<String>();
+				for (GrantedAuthority a : authorities) {
+					roles.add(a.getAuthority());
+				}
+
+				if (isUser(roles)) {
+					map.addAttribute("header", "header_user");
+					map.addAttribute("footer", "footer_user");
+				} else if (isAdmin(roles)) {
+					map.addAttribute("header", "header_admin");
+					map.addAttribute("footer", "footer_admin");
+				}
+			} else {
+				map.addAttribute("header", "header_login");
+				map.addAttribute("footer", "footer_login");
+			}
 			return "/bookview/error";
 		}
 	}
@@ -118,7 +215,7 @@ public class BookController {
 	public String editBook(@AuthenticationPrincipal User user, UploadInformationDTO dto,
 			@RequestParam("id") String editBookId,
 			@RequestParam(value = "idChecked", required = false) List<String> categoriesId, Model model,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes, ModelMap map, Authentication authentication) {
 		try {
 			Person currentUser = new Person();
 			Long id = Long.parseLong(editBookId);
@@ -130,12 +227,30 @@ public class BookController {
 			bookService.update(dto, currentUser, categoriesId, editBook);
 			return "bookview/success";
 		} catch (Exception e) {
+			if (authentication != null) {
+				Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+				List<String> roles = new ArrayList<String>();
+				for (GrantedAuthority a : authorities) {
+					roles.add(a.getAuthority());
+				}
+
+				if (isUser(roles)) {
+					map.addAttribute("header", "header_user");
+					map.addAttribute("footer", "footer_user");
+				} else if (isAdmin(roles)) {
+					map.addAttribute("header", "header_admin");
+					map.addAttribute("footer", "footer_admin");
+				}
+			} else {
+				map.addAttribute("header", "header_login");
+				map.addAttribute("footer", "footer_login");
+			}
 			return "bookview/error";
 		}
 	}
 
 	@GetMapping("/bookview/infor/{id}")
-	public String showBookDetails(UploadInformationDTO dto, @PathVariable("id") String id, Model model) {
+	public String showBookDetails(UploadInformationDTO dto, @PathVariable("id") String id, Model model, ModelMap map, Authentication authentication) {
 		try {
 			Long idCurrent = Long.parseLong(id);
 			Book currentBook = bookService.findBookByID(idCurrent);
@@ -158,8 +273,40 @@ public class BookController {
 			model.addAttribute("id", id);
 			return "bookview/infor";
 		} catch (Exception e) {
+			if (authentication != null) {
+				Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+				List<String> roles = new ArrayList<String>();
+				for (GrantedAuthority a : authorities) {
+					roles.add(a.getAuthority());
+				}
+				
+				if (isUser(roles)) {
+					map.addAttribute("header", "header_user");
+					map.addAttribute("footer", "footer_user");
+				} else if (isAdmin(roles)) {
+					map.addAttribute("header", "header_admin");
+					map.addAttribute("footer", "footer_admin");
+				}
+			} else {
+				map.addAttribute("header", "header_login");
+				map.addAttribute("footer", "footer_login");
+			}
 			return "bookview/error";
 		}
 
+	}
+
+	private boolean isUser(List<String> roles) {
+		if (roles.contains("ROLE_EMPLOYEE")) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isAdmin(List<String> roles) {
+		if (roles.contains("ROLE_ADMIN")) {
+			return true;
+		}
+		return false;
 	}
 }

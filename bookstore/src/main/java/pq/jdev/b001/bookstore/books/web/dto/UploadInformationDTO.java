@@ -2,7 +2,9 @@ package pq.jdev.b001.bookstore.books.web.dto;
 
 import java.sql.Date;
 import java.util.List;
+
 import javax.validation.constraints.NotEmpty;
+
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,7 +16,7 @@ public class UploadInformationDTO {
 	@NotEmpty
 	private String title;
 
-	@Nullable
+	@NotEmpty
 	private Long price;
 
 	@Nullable
@@ -32,8 +34,8 @@ public class UploadInformationDTO {
 
 	private List<Publishers> publishers;
 
-	@Nullable
-	private int publishedYear;
+	@NotEmpty
+	private Integer publishedYear;
 
 	private List<String> categoriesId;
 
@@ -113,11 +115,11 @@ public class UploadInformationDTO {
 		this.publishers = publishers;
 	}
 
-	public int getPublishedYear() {
+	public Integer getPublishedYear() {
 		return publishedYear;
 	}
 
-	public void setPublishedYear(int publishedYear) {
+	public void setPublishedYear(Integer publishedYear) {
 		this.publishedYear = publishedYear;
 	}
 
