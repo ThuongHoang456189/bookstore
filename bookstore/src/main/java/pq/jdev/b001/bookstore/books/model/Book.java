@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import pq.jdev.b001.bookstore.category.model.Category;
 import pq.jdev.b001.bookstore.publishers.model.Publishers;
@@ -36,10 +37,11 @@ public class Book implements Serializable {
 	@Column(name = "ID")
 	private long id;
 	
+	@NotEmpty
 	@Column(name = "TITLE", columnDefinition = "VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin")
 	private String title;
 	
-	@NotEmpty
+	@NotNull
 	@Column(name = "PRICE")
 	private Long price;
 
@@ -84,7 +86,7 @@ public class Book implements Serializable {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -100,7 +102,7 @@ public class Book implements Serializable {
 		return price;
 	}
 
-	public void setPrice(long price) {
+	public void setPrice(Long price) {
 		this.price = price;
 	}
 
