@@ -78,7 +78,8 @@ public class CategoryListController {
 		int end = Math.min(begin + 5, pageLs.getPageCount());
 		int totalPageCount = pageLs.getPageCount();
 		String baseUrl = "/categorylist/page/";
-
+		
+		
 		model.addAttribute("beginIndex", begin);
 		model.addAttribute("endIndex", end);
 		model.addAttribute("currentIndex", current);
@@ -86,7 +87,7 @@ public class CategoryListController {
 		model.addAttribute("baseUrl", baseUrl);
 		model.addAttribute("categoryL", pageLs);
 
-		int pagesizeCP = 10;
+		int pagesizeCP = 5;
 		PagedListHolder<?> pagePubs = null;
 		PagedListHolder<?> pageCates = null;
 		List<Publishers> listPub = (List<Publishers>) publisherService.findAll();
