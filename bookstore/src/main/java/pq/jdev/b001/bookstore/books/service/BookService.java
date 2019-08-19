@@ -34,4 +34,8 @@ public interface BookService {
 
 	public List<SelectCategory> showAllCategoriesWithFlag(Book editBook);
 
+	public void changePublisher(Long idFrom, Long idTo);
+
+//	public void changeCategory(Long idTo, Long idFrom);
+
 }

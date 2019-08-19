@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,7 +36,7 @@ public class Book implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
-	private long id;
+	private Long id;
 	
 	@NotEmpty
 	@Column(name = "TITLE", columnDefinition = "VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin")
@@ -68,7 +69,7 @@ public class Book implements Serializable {
 	@JoinColumn(name = "PUBLISHER_ID ")
 	private Publishers publisher;
 
-	@ManyToMany(cascade = { CascadeType.ALL })
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "book_category", joinColumns = { @JoinColumn(name = "BOOK_ID") }, inverseJoinColumns = {
 			@JoinColumn(name = "CATEGORY_ID") })
 	private Set<Category> categories;
@@ -82,7 +83,7 @@ public class Book implements Serializable {
 	@Column(name = "DESCRIPTION")
 	private String description;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 

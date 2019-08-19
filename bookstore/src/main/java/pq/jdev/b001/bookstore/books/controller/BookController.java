@@ -353,7 +353,7 @@ public class BookController {
 				map.addAttribute("footer", "footer_login");
 			}
 			
-			int pagesizeCP = 10;
+			int pagesizeCP = 15;
 			PagedListHolder<?> pagePubs = null;
 			PagedListHolder<?> pageCates = null;
 			List<Publishers> listPub = (List<Publishers>) publisherService.findAll();

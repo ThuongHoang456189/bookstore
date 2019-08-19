@@ -445,4 +445,13 @@ public class BookServiceImpl implements BookService {
 		return selectCategories;
 	}
 
+	@Override
+	public void changePublisher(Long idFrom, Long idTo) {
+		bookRepository.changePublisher(idFrom, idTo);
+	}
+
+//	@Override
+//	public void changeCategory(Long idTo, Long idFrom) {
+//	}
+
 }

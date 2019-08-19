@@ -58,4 +58,19 @@ public interface BookRepository extends CrudRepository<Book, Long>, JpaRepositor
 	@Modifying
 	@Query("update Book book set book.description =:description where book.id =:bookid")
 	public void saveUpdateDescription(@Param("bookid") Long bookid, @Param("description") String description);
+	
+	@Modifying
+    @Query("Delete FROM Book b where b.id = :id")
+    void deleteByIdB(@Param("id") Long id);
+
+	public Book findByTitle(String title);
+	
+	@Modifying
+	@Query("Update Book book set book.publisher.id = :idTo where book.publisher.id = :idFrom")
+	public void changePublisher(@Param("idFrom") Long idFrom, @Param("idTo") Long idTo);
+	
+//	@Modifying
+//	@Query("Select b From Book b where b.categories.id = :idFrom")
+//	public List<Book> findBookByCategoryId(@Param("idFrom") Long idFrom);
+
 }
